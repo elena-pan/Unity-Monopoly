@@ -1,36 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Security.Cryptography;
 using UnityEngine;
 
-public class DiceScript : MonoBehaviour
-{
-    static Rigidbody rb;
-    public static Vector3 diceVelocity;
-    DiceNumberGameScript refscript = GetComponent<DiceNumberGameScript>()
+public class DiceScript : MonoBehaviour {
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        rb = GetComponent<Rigidbody> ();
-    }
+	static Rigidbody rb;
+	public static Vector3 diceVelocity;
 
-    // Update is called once per frame
-    void Update()
-    {
-        diceVelocity = rb.velocity;
+	// Use this for initialization
+	void Start () {
+		rb = GetComponent<Rigidbody> ();
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		diceVelocity = rb.velocity;
 
-        if (Input.GetKeyDown (KeyCode.Space))
-        {
-            DiceNumberTextScript.diceNumber = 0;
-            float dirX = Random.Range(0, 500);
-            float dirY = Random.Range(0, 500);
-            float dirZ = Random.Range(0, 500);
-            transform.position = new Vector3(0, 2, 0);
-            transform.rotation = Quaternion.identity;
-            rb.AddForce(transform.up * 500);
-            rb.AddTorque(dirX, dirY, dirZ);
-        }
-    }
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			DiceNumberTextScript.diceNumber = 0;
+			float dirX = Random.Range (10, 1000);
+			float dirY = Random.Range (10, 1000);
+			float dirZ = Random.Range (10, 1000);
+			transform.position = new Vector3 (0, 1000, 0);
+			transform.rotation = Quaternion.identity;
+			rb.AddForce (transform.up * 5000);
+			rb.AddTorque (dirX, dirY, dirZ);
+		}
+	}
 }
