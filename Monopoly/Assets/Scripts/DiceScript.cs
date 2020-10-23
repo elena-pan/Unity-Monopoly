@@ -2,16 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-<<<<<<< HEAD
 public class DiceScript : MonoBehaviour
 {
-    static Rigidbody rb;
-    public static Vector3 diceVelocity;
-   
-=======
-public class DiceScript : MonoBehaviour {
->>>>>>> 99b87de44fee19c3f4bc424a1344c85017ab694d
-
+    
 	static Rigidbody rb;
 	public static Vector3 diceVelocity;
 
