@@ -1328,7 +1328,7 @@ GameObject:
   m_Layer: 0
   m_Name: Side 3
   m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1558,7 +1558,7 @@ GameObject:
   m_Layer: 0
   m_Name: Side 4
   m_TagString: Untagged
-  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1767,7 +1767,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a6dcba97470633d42b5338a6faa5ed59,
         type: 3}
       propertyPath: m_Name
-      value: dice
+      value: Dice
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6dcba97470633d42b5338a6faa5ed59, type: 3}
@@ -1812,6 +1812,30 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 697344511}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &697344516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697344512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e47840c77801fb14283c8bbdd3388087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &697344517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697344512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d68442ce4416ff141ad662af7bf1280e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &700349402
 GameObject:
   m_ObjectHideFlags: 0
@@ -2557,7 +2581,7 @@ GameObject:
   m_Layer: 0
   m_Name: Side 2
   m_TagString: Untagged
-  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3331,7 +3355,7 @@ GameObject:
   m_Layer: 0
   m_Name: Side 1
   m_TagString: Untagged
-  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3840,7 +3864,7 @@ GameObject:
   m_Layer: 0
   m_Name: Side 6
   m_TagString: Untagged
-  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -4632,7 +4656,7 @@ GameObject:
   m_Layer: 0
   m_Name: Side 5
   m_TagString: Untagged
-  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
