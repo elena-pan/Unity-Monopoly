@@ -8,7 +8,7 @@ public class DiceScript : MonoBehaviour
 {
     static Rigidbody rb;
     public static Vector3 diceVelocity;
-    DiceNumberGameScript refscript = GetComponent<DiceNumberGameScript>()
+   
 
     // Start is called before the first frame update
     void Start()
