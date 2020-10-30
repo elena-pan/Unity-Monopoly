@@ -25,16 +25,15 @@ public class Dice : MonoBehaviour
 		rb.AddTorque (dirX, dirY, dirZ);
 	}
 
-	void OnTriggerEnter(Collider col)
+	void OnCollisionStay(Collision col)
 	{
-		diceVelocity = rb.velocity;
-		print(diceVelocity);
-		if (diceVelocity.x == 0f && diceVelocity.y == 0f && diceVelocity.z == 0f)
+		if (Mathf.Abs(diceVelocity.x) < 0.1f && Mathf.Abs(diceVelocity.y) < 0.1f && Mathf.Abs(diceVelocity.z) < 0.1f)
 		{
 			if (col.gameObject.name == "Centrepiece") {
 				GameObject centrepiece = GameObject.Find("Centrepiece");
                 DiceResult diceResult = centrepiece.GetComponent<DiceResult>();
                 currentNum = diceResult.diceNum;
+				print(currentNum);
 			}
 		}
 	}
