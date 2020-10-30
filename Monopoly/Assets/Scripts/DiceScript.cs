@@ -18,7 +18,6 @@ public class DiceScript : MonoBehaviour
 		diceVelocity = rb.velocity;
 
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			DiceNumberTextScript.diceNumber = 0;
 			float dirX = Random.Range (10, 1000);
 			float dirY = Random.Range (10, 1000);
 			float dirZ = Random.Range (10, 1000);
