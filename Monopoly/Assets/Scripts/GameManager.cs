@@ -7,13 +7,21 @@ public class GameManager : MonoBehaviour
 
     public Board board;
 
-    private GameObject[,] pieces;
-
     private Player one;
     private Player two;
     public Player currentPlayer;
     public Player otherPlayer;
 
+    public GameObject cylinder;
+    public GameObject cube;
+
+    public GameObject scottieDog;
+    public GameObject topHat;
+    public GameObject thimble;
+    public GameObject shoe;
+    public GameObject wheelbarrow;
+    public GameObject car; 
+    public GameObject battleship;
     void Awake()
     {
         instance = this;
@@ -21,11 +29,8 @@ public class GameManager : MonoBehaviour
 
     void Start ()
     {
-        pieces = new GameObject[1, 1];
-
         one = new Player("1");
         two = new Player("2");
-
         currentPlayer = one;
         otherPlayer = two;
 
@@ -34,55 +39,21 @@ public class GameManager : MonoBehaviour
 
     private void InitialSetup()
     {
-        AddPiece(whiteRook, white, 0, 0);
-        AddPiece(whiteKnight, white, 1, 0);
+        board.SetUpLocations();
+        AddPiece(cylinder, one, 0);
+        AddPiece(cube, two, 0);
     }
 
-    public void AddPiece(GameObject prefab, Player player, int col, int row)
+    public void AddPiece(GameObject prefab, Player player, int location)
     {
-        GameObject pieceObject = board.AddPiece(prefab, col, row);
-        player.pieces.Add(pieceObject);
-        pieces[col, row] = pieceObject;
+        GameObject pieceObject = board.AddPiece(prefab, location);
+        player.piece = pieceObject;
     }
 
-    public void Move(GameObject piece, Vector2Int gridPoint)
+    public void Move(Player player, int location)
     {
-        Piece pieceComponent = piece.GetComponent<Piece>();
-
-        Vector2Int startGridPoint = GridForPiece(piece);
-        pieces[startGridPoint.x, startGridPoint.y] = null;
-        pieces[gridPoint.x, gridPoint.y] = piece;
-        board.MovePiece(piece, gridPoint);
-    }
-
-    public bool DoesPieceBelongToCurrentPlayer(GameObject piece)
-    {
-        return currentPlayer.piece == piece;
-    }
-
-    public GameObject PieceAtGrid(Vector2Int gridPoint)
-    {
-        if (gridPoint.x > 7 || gridPoint.y > 7 || gridPoint.x < 0 || gridPoint.y < 0)
-        {
-            return null;
-        }
-        return pieces[gridPoint.x, gridPoint.y];
-    }
-
-    public Vector2Int GridForPiece(GameObject piece)
-    {
-        for (int i = 0; i < 8; i++) 
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                if (pieces[i, j] == piece)
-                {
-                    return new Vector2Int(i, j);
-                }
-            }
-        }
-
-        return new Vector2Int(-1, -1);
+        board.MovePiece(player.piece, location);
+        player.location = location;
     }
 
     public void NextPlayer()
