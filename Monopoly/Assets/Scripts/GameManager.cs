@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject wheelbarrow;
     public GameObject car; 
     public GameObject battleship;
+    
     void Awake()
     {
         instance = this;
