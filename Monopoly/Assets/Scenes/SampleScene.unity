@@ -1821,21 +1821,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 697344512}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab1a33c1e9ede9d43834102acd2fda9e, type: 3}
+  m_Script: {fileID: 11500000, guid: 3dca7f58eaf1aa146980e8fb3aac67ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &697344517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 697344512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d68442ce4416ff141ad662af7bf1280e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  currentNum: 0
 --- !u!1 &700349402
 GameObject:
   m_ObjectHideFlags: 0
@@ -4541,6 +4530,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   board: {fileID: 1541912463}
+  dice: {fileID: 697344516}
   cylinder: {fileID: 8685222191220881498, guid: cc16dc8c18d801b42bef6a88d3457eb1,
     type: 3}
   cube: {fileID: 1142989229798319379, guid: 16ef6a533fcdb624b8f1375c9c96012a, type: 3}
