@@ -36,7 +36,6 @@ public class GameManager : MonoBehaviour
         two = new Player("2");
         currentPlayer = one;
         otherPlayer = two;
-
         InitialSetup();
     }
 
@@ -56,19 +55,19 @@ public class GameManager : MonoBehaviour
 
     public void Move(Player player, int steps)
     {
-    int location;
-   
-       
-    location = player.location;
-    location+=steps;
-    if (location > 39)
-    {
-        location = location - 39;
-    }
-    board.MovePiece(player.piece, location);
-    player.location = location;
-       
-    NextPlayer();
+        int location;
+    
+        
+        location = player.location;
+        location+=steps;
+        if (location > 39)
+        {
+            location = location - 39;
+        }
+        board.MovePiece(player.piece, location);
+        player.location = location;
+        
+        NextPlayer();
     }
 
     public void NextPlayer()

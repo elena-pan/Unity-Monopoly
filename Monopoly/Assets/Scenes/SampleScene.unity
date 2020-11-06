@@ -2221,6 +2221,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2293,6 +2294,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90.77899, y: -0.000015258789, z: -0.000015258789}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae37f87e1f11e7840b6ef7bb9664c187, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1066499087
 GameObject:
   m_ObjectHideFlags: 0
@@ -4545,6 +4558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   board: {fileID: 1541912463}
   dice: {fileID: 697344516}
+  cameraController: {fileID: 963194229}
   cylinder: {fileID: 8685222191220881498, guid: cc16dc8c18d801b42bef6a88d3457eb1,
     type: 3}
   cube: {fileID: 1142989229798319379, guid: 16ef6a533fcdb624b8f1375c9c96012a, type: 3}
