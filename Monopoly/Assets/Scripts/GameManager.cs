@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
     private void InitialSetup()
     {
         board.SetUpLocations();
+        board.SetUpCards();
         for (int i = 0; i < players.Count; i++) {
             AddPiece(pieces[i], players[i], 0);
         }
