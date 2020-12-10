@@ -2306,6 +2306,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae37f87e1f11e7840b6ef7bb9664c187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  axes: 0
+  sensitivityX: 50
+  sensitivityY: 50
+  minimumX: -360
+  maximumX: 360
+  minimumY: -90
+  maximumY: 90
 --- !u!1 &1066499087
 GameObject:
   m_ObjectHideFlags: 0
@@ -4558,10 +4565,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   board: {fileID: 1541912463}
   dice: {fileID: 697344516}
-  cameraController: {fileID: 963194229}
+  currentPlayer: 0
   cylinder: {fileID: 8685222191220881498, guid: cc16dc8c18d801b42bef6a88d3457eb1,
     type: 3}
   cube: {fileID: 1142989229798319379, guid: 16ef6a533fcdb624b8f1375c9c96012a, type: 3}
+  capsule: {fileID: 1218045090644195188, guid: 679cacacdd5b16a4a935eaffa58e24c6, type: 3}
+  sphere: {fileID: 6282522271461974692, guid: 5afa25be404c9854095d032e79e37bc4, type: 3}
+  pieces: []
   scottieDog: {fileID: 0}
   topHat: {fileID: 0}
   thimble: {fileID: 0}

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,13 +11,14 @@ public class GameManager : MonoBehaviour
     public Board board;
     public Dice dice;
 
-    private Player one;
-    private Player two;
-    public Player currentPlayer;
-    public Player otherPlayer;
-
+    public int currentPlayer;
+    public List<Player> players = new List<Player>();
+    
     public GameObject cylinder;
     public GameObject cube;
+    public GameObject capsule;
+    public GameObject sphere;
+    public List<GameObject> pieces = new List<GameObject>();
 
     public GameObject scottieDog;
     public GameObject topHat;
@@ -32,18 +35,36 @@ public class GameManager : MonoBehaviour
 
     void Start ()
     {
-        one = new Player("1");
-        two = new Player("2");
-        currentPlayer = one;
-        otherPlayer = two;
+        currentPlayer = 0;
+
+        pieces.Add(cylinder);
+        pieces.Add(cube);
+        pieces.Add(capsule);
+        pieces.Add(sphere);
+
+        Player one = new Player("1");
+        Player two = new Player("2");
+        Player three = new Player("3");
+        Player four = new Player("4");
+        Player five = new Player("5");
+        Player six = new Player("6");
+        Player seven = new Player("7");
+        Player eight = new Player("8");
+
+        players.Add(one);
+        players.Add(two);
+        players.Add(three);
+        players.Add(four);
+
         InitialSetup();
     }
 
     private void InitialSetup()
     {
         board.SetUpLocations();
-        AddPiece(cylinder, one, 0);
-        AddPiece(cube, two, 0);
+        for (int i = 0; i < players.Count; i++) {
+            AddPiece(pieces[i], players[i], 0);
+        }
         NextPlayer();
     }
 
@@ -56,7 +77,6 @@ public class GameManager : MonoBehaviour
     public void Move(Player player, int steps)
     {
         int location;
-    
         
         location = player.location;
         location+=steps;
@@ -72,9 +92,11 @@ public class GameManager : MonoBehaviour
 
     public void NextPlayer()
     {
-        Player tempPlayer = currentPlayer;
-        currentPlayer = otherPlayer;
-        otherPlayer = tempPlayer;
+        if (currentPlayer == players.Count-1) {
+            currentPlayer = 0;
+        } else {
+            currentPlayer++;
+        }
 
         StartCoroutine(WaitForDiceRoll());
     }
@@ -89,7 +111,7 @@ public class GameManager : MonoBehaviour
         while (dice.currentNum == -1) {
             yield return new WaitForSeconds(3);
         }
-        Move(currentPlayer, dice.currentNum);
+        Move(players[currentPlayer], dice.currentNum);
     }
     
     private IEnumerator WaitForKeyPress(KeyCode key)

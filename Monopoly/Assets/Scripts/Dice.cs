@@ -33,7 +33,6 @@ public class Dice : MonoBehaviour
 				GameObject centrepiece = GameObject.Find("Centrepiece");
                 DiceResult diceResult = centrepiece.GetComponent<DiceResult>();
                 currentNum = diceResult.diceNum;
-				print(currentNum);
 			}
 		}
 	}
