@@ -93,18 +93,20 @@ public class GameManager : MonoBehaviour
 
     public void LandedOn(Player player)
     {
-        switch (typeof(player.location))
-        {
-            case Property:
-                break;
-            case Railroad:
-                break;
-            case Utility:
-                break;
-            case Tax:
-                break;
-            case Location:
-                break;
+        if (player.location is Property) {
+
+        } 
+        else if (player.location is Railroad) {
+
+        }
+        else if (player.location is Utility) {
+
+        }
+        else if (player.location is Tax) {
+            
+        }
+        else if (player.location is Location) {
+
         }
     }
 
@@ -131,7 +133,7 @@ public class GameManager : MonoBehaviour
         recipient.balance += amount;
     }
 
-    public void PayMoney(Player payer, Player? recipient, int amount)
+    public void PayMoney(Player payer, Player recipient, int amount)
     {
         if (payer.balance < amount) {
             NoMoney(payer, amount);
