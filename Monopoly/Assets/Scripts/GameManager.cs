@@ -91,6 +91,23 @@ public class GameManager : MonoBehaviour
         NextPlayer();
     }
 
+    public void LandedOn(Player player)
+    {
+        switch (typeof(player.location))
+        {
+            case Property:
+                break;
+            case Railroad:
+                break;
+            case Utility:
+                break;
+            case Tax:
+                break;
+            case Location:
+                break;
+        }
+    }
+
     public void NextPlayer()
     {
         if (currentPlayer == players.Count-1) {
@@ -99,10 +116,45 @@ public class GameManager : MonoBehaviour
             currentPlayer++;
         }
 
-        StartCoroutine(WaitForDiceRoll());
+        if (players[currentPlayer].isBankrupt) {
+            NextPlayer();
+            return;
+        }
+
+        StartCoroutine(WaitForDiceRoll(diceNum => {
+            Move(players[currentPlayer], diceNum);
+        }));
+    }
+
+    public void ReceiveMoneyFromBank(Player recipient, int amount)
+    {
+        recipient.balance += amount;
+    }
+
+    public void PayMoney(Player payer, Player? recipient, int amount)
+    {
+        if (payer.balance < amount) {
+            NoMoney(payer, amount);
+        }
+
+        payer.balance -= amount;
+        if (recipient != null) {
+            recipient.balance += amount;
+        }
+
+    }
+
+    public void NoMoney(Player player, int amount)
+    {
+
+    }
+
+    public void DisplayText(string message)
+    {
+        
     }
     
-    private IEnumerator WaitForDiceRoll() {
+    private IEnumerator WaitForDiceRoll(System.Action<int> callback) {
     
         // wait for player to press space
         yield return WaitForKeyPress(KeyCode.Space); // wait for this function to return
@@ -112,7 +164,8 @@ public class GameManager : MonoBehaviour
         while (dice.currentNum == -1) {
             yield return new WaitForSeconds(3);
         }
-        Move(players[currentPlayer], dice.currentNum);
+
+        callback(dice.currentNum); // Use callback to do something with result
     }
     
     private IEnumerator WaitForKeyPress(KeyCode key)
