@@ -93,20 +93,33 @@ public class GameManager : MonoBehaviour
 
     public void LandedOn(Player player)
     {
-        if (player.location is Property) {
+        if (board.locations[player.location] is Property) {
 
         } 
-        else if (player.location is Railroad) {
+        else if (board.locations[player.location] is Railroad) {
 
         }
-        else if (player.location is Utility) {
+        else if (board.locations[player.location] is Utility) {
 
         }
-        else if (player.location is Tax) {
+        else if (board.locations[player.location] is Tax) {
             
         }
-        else if (player.location is Location) {
-
+        else if (board.locations[player.location] is Location) {
+            switch(board.locations[player.location].name) {
+                case "GO":
+                    break;
+                case "Jail":
+                    break;
+                case "Free Parking":
+                    break;
+                case "Go To Jail":
+                    break;
+                case "Chance":
+                    break;
+                case "Community Chest":
+                    break;
+            }
         }
     }
 
