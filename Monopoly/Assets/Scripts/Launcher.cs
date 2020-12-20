@@ -122,6 +122,7 @@ namespace Monopoly
         {
             if (PhotonNetwork.IsMasterClient)
             {
+                PhotonNetwork.CurrentRoom.IsOpen = false; // Close room so nobody can join
                 SwitchPanels(connectingPanel);
                 PhotonNetwork.LoadLevel("Game");
             }
@@ -192,6 +193,12 @@ namespace Monopoly
         {
             SwitchPanels(lobbyPanel);
             playerList = PhotonNetwork.PlayerList;
+
+            // Set custom player property as not bankrupt
+            ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+            hash.Add("Bankrupt", false);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+            
             UpdateTexts();
         }
 

@@ -31,8 +31,8 @@ namespace Monopoly
 		{
 			if (Mathf.Abs(diceVelocity.x) < 0.1f && Mathf.Abs(diceVelocity.y) < 0.1f && Mathf.Abs(diceVelocity.z) < 0.1f)
 			{
-				if (col.gameObject.name == "Centrepiece") {
-					GameObject centrepiece = GameObject.Find("Centrepiece");
+				if (col.gameObject.name == "Board") {
+					GameObject centrepiece = GameObject.Find("Board");
 					DiceResult diceResult = centrepiece.GetComponent<DiceResult>();
 					currentNum = diceResult.diceNum;
 				}

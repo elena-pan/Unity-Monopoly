@@ -15,19 +15,21 @@ namespace Monopoly
         public Dice dice;
 
         public int currentPlayer;
-        public List<Player> players = new List<Player>();
+        public Player[] players;
 
         public GameObject cannon;
         public GameObject car;
         public GameObject iron;
-        public GameObject shoe;
         public GameObject locomotive;
         public GameObject thimble; 
         public GameObject topHat;
-        public Dictionary<GameObject, bool> pieces;
+        public GameObject wheelbarrow;
+        public List<GameObject> pieces;
 
         public GameObject house;
         public GameObject hotel;
+
+        public GameObject PlayerUi;
         
         void Awake()
         {
@@ -37,66 +39,65 @@ namespace Monopoly
         void Start ()
         {
             currentPlayer = 0;
-            pieces = new Dictionary<GameObject, bool>();
-            pieces.Add(cannon, false);
-            pieces.Add(car, false);
-            pieces.Add(iron, false);
-            pieces.Add(shoe, false);
-            pieces.Add(locomotive, false);
-            pieces.Add(thimble, false);
-            pieces.Add(topHat, false);
-            
-            InitialSetup();
+            players = PhotonNetwork.PlayerList;
+
+            pieces = new List<GameObject>();
+            pieces.Add(cannon);
+            pieces.Add(car);
+            pieces.Add(iron);
+            pieces.Add(locomotive);
+            pieces.Add(thimble);
+            pieces.Add(topHat);
+            pieces.Add(wheelbarrow);
+
+            if (PlayerManager.LocalPlayerInstance == null)
+            {
+                // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
+                PhotonNetwork.Instantiate(pieces[0].name, board.locations[0].gridPoint, Quaternion.identity, 0);
+            }
+
+            SetupBoard();
         }
 
-        private void InitialSetup()
+        private void SetupBoard()
         {
             board.SetUpLocations();
             board.SetUpCards();
-            for (int i = 0; i < players.Count; i++) {
-                AddPiece(pieces[i], players[i], 0);
-            }
             NextPlayer();
         }
 
-        public void AddPiece(GameObject prefab, Player player, int location)
-        {
-            GameObject pieceObject = board.AddPiece(prefab, location);
-            player.piece = pieceObject;
-        }
-
-        public void Move(Player player, int steps)
+        public void Move(int steps)
         {
             int location;
             
-            location = player.location;
+            location = PlayerManager.location;
             location+=steps;
             if (location > 39)
             {
                 location = location - 39;
             }
-            board.MovePiece(player.piece, location);
-            player.location = location;
+            board.MovePiece(PlayerManager.LocalPlayerInstance, location);
+            PlayerManager.location = location;
             
             NextPlayer();
         }
 
-        public void LandedOn(Player player)
+        public void LandedOn()
         {
-            if (board.locations[player.location] is Property) {
+            if (board.locations[PlayerManager.location] is Property) {
 
             } 
-            else if (board.locations[player.location] is Railroad) {
+            else if (board.locations[PlayerManager.location] is Railroad) {
 
             }
-            else if (board.locations[player.location] is Utility) {
+            else if (board.locations[PlayerManager.location] is Utility) {
 
             }
-            else if (board.locations[player.location] is Tax) {
+            else if (board.locations[PlayerManager.location] is Tax) {
                 
             }
-            else if (board.locations[player.location] is Location) {
-                switch(board.locations[player.location].name) {
+            else if (board.locations[PlayerManager.location] is Location) {
+                switch(board.locations[PlayerManager.location].name) {
                     case "GO":
                         break;
                     case "Jail":
@@ -115,48 +116,46 @@ namespace Monopoly
 
         public void NextPlayer()
         {
-            if (currentPlayer == players.Count-1) {
+            if (currentPlayer == PhotonNetwork.CurrentRoom.PlayerCount-1) {
                 currentPlayer = 0;
             } else {
                 currentPlayer++;
             }
 
-            if (players[currentPlayer].isBankrupt) {
+            if ((bool)players[currentPlayer].CustomProperties["Bankrupt"]) {
                 NextPlayer();
                 return;
             }
 
-            StartCoroutine(WaitForDiceRoll(diceNum => {
-                Move(players[currentPlayer], diceNum);
-            }));
+            if (players[currentPlayer] == PhotonNetwork.LocalPlayer)
+            {
+                StartCoroutine(WaitForDiceRoll(diceNum => {
+                    Move(diceNum);
+                }));
+            }
         }
 
-        public void ReceiveMoneyFromBank(Player recipient, int amount)
+        public void ReceiveMoneyFromBank(int amount)
         {
-            recipient.balance += amount;
+            PlayerManager.balance += amount;
         }
 
-        public void PayMoney(Player payer, Player recipient, int amount)
+        public void PayMoney(Player recipient, int amount)
         {
-            if (payer.balance < amount) {
-                NoMoney(payer, amount);
+
+            if (PlayerManager.balance < amount) {
+                NoMoney(amount);
             }
 
-            payer.balance -= amount;
+            PlayerManager.balance -= amount;
             if (recipient != null) {
-                recipient.balance += amount;
+                //recipient.balance += amount;
             }
-
         }
 
-        public void NoMoney(Player player, int amount)
+        public void NoMoney(int amount)
         {
 
-        }
-
-        public void DisplayText(string message)
-        {
-            
         }
         
         private IEnumerator WaitForDiceRoll(System.Action<int> callback) {
@@ -186,6 +185,13 @@ namespace Monopoly
             }
         
             // now this function returns
+        }
+
+        public override void OnPlayerLeftRoom(Player other)
+        {
+            players = PhotonNetwork.PlayerList;
+            string text = other.NickName + " has left the game.";
+            PlayerUi.SendMessage ("AddActivityText", text, SendMessageOptions.RequireReceiver);
         }
     }
 }
