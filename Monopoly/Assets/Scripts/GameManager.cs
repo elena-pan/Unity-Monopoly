@@ -16,21 +16,18 @@ namespace Monopoly
 
         public int currentPlayer;
         public List<Player> players = new List<Player>();
-        
-        public GameObject cylinder;
-        public GameObject cube;
-        public GameObject capsule;
-        public GameObject sphere;
 
-        public GameObject scottieDog;
-        public GameObject topHat;
-        public GameObject thimble;
-        public GameObject shoe;
-        public GameObject wheelbarrow;
-        public GameObject car; 
-        public GameObject battleship;
+        public GameObject cannon;
+        public GameObject car;
         public GameObject iron;
-        public GameObject[] pieces = {scottieDog, topHat, thimble, shoe, wheelbarrow, car, battleship, iron};
+        public GameObject shoe;
+        public GameObject locomotive;
+        public GameObject thimble; 
+        public GameObject topHat;
+        public Dictionary<GameObject, bool> pieces;
+
+        public GameObject house;
+        public GameObject hotel;
         
         void Awake()
         {
@@ -40,26 +37,15 @@ namespace Monopoly
         void Start ()
         {
             currentPlayer = 0;
-
-            pieces.Add(cylinder);
-            pieces.Add(cube);
-            pieces.Add(capsule);
-            pieces.Add(sphere);
-
-            Player one = new Player("1");
-            Player two = new Player("2");
-            Player three = new Player("3");
-            Player four = new Player("4");
-            Player five = new Player("5");
-            Player six = new Player("6");
-            Player seven = new Player("7");
-            Player eight = new Player("8");
-
-            players.Add(one);
-            players.Add(two);
-            players.Add(three);
-            players.Add(four);
-
+            pieces = new Dictionary<GameObject, bool>();
+            pieces.Add(cannon, false);
+            pieces.Add(car, false);
+            pieces.Add(iron, false);
+            pieces.Add(shoe, false);
+            pieces.Add(locomotive, false);
+            pieces.Add(thimble, false);
+            pieces.Add(topHat, false);
+            
             InitialSetup();
         }
 

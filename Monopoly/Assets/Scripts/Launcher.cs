@@ -71,7 +71,6 @@ namespace Monopoly
             options.Add("5");
             options.Add("6");
             options.Add("7");
-            options.Add("8");
 
             numPlayersDropdown.AddOptions(options);
             numPlayersDropdown.value = numPlayers-2;
