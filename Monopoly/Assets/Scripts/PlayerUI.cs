@@ -2,13 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
-using ExitGames.Client.Photon;
 
 namespace Monopoly
 {
-    public class PlayerUI : MonoBehaviour, IOnEventCallback
+    public class PlayerUI : MonoBehaviour
     {
-        public const byte SendNewActivityLineCode = 1;
 
         [SerializeField]
         private Text activityPanelLine1;
@@ -20,6 +18,15 @@ namespace Monopoly
         private Text activityPanelLine4;
         [SerializeField]
         private Text statsBody;
+
+        [SerializeField]
+        private Button buyPropertyButton;
+        [SerializeField]
+        private Button buildHouseButton;
+        [SerializeField]
+        private Button sellHouseButton;
+        [SerializeField]
+        private Button endTurnButton;
         private PlayerManager target;
         void Awake()
         {
@@ -58,29 +65,39 @@ namespace Monopoly
             target = _target;
             //playerNameText.text = target.photonView.Owner.NickName;
         }
-        public void SendNewActivityLine(string content)
-        {
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // Set Receivers to All to receive this event on the local client as well
-            PhotonNetwork.RaiseEvent(SendNewActivityLineCode, content, raiseEventOptions, SendOptions.SendReliable);
-        }
-        public void OnEvent(EventData photonEvent)
-        {
-            byte eventCode = photonEvent.Code;
-            if (eventCode == SendNewActivityLineCode)
-            {
-                string data = (string)photonEvent.CustomData;
-                AddActivityText(data);
+        public void EnableButton(string button) {
+            switch (button) {
+                case "buyPropertyButton":
+                    buyPropertyButton.interactable = true;
+                    break;
+                case "buildHouseButton":
+                    buildHouseButton.interactable = true;
+                    break;
+                case "sellHouseButton":
+                    sellHouseButton.interactable = true;
+                    break;
+                case "endTurnButton":
+                    endTurnButton.interactable = true;
+                    break;
             }
         }
-
-        private void OnEnable()
+        
+        public void DisableButton(string button)
         {
-            PhotonNetwork.AddCallbackTarget(this);
-        }
-
-        private void OnDisable()
-        {
-            PhotonNetwork.RemoveCallbackTarget(this);
+            switch (button) {
+                case "buyPropertyButton":
+                    buyPropertyButton.interactable = false;
+                    break;
+                case "buildHouseButton":
+                    buildHouseButton.interactable = false;
+                    break;
+                case "sellHouseButton":
+                    sellHouseButton.interactable = false;
+                    break;
+                case "endTurnButton":
+                    endTurnButton.interactable = false;
+                    break;
+            }
         }
     }
 }

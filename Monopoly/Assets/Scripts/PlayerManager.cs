@@ -12,7 +12,6 @@ namespace Monopoly
         public static GameObject LocalPlayerInstance;
         public static int location;
         public static int balance;
-        public static bool[] ownedProperties;
 
         void Awake()
         {
@@ -22,7 +21,6 @@ namespace Monopoly
                 PlayerManager.LocalPlayerInstance = this.gameObject;
                 PlayerManager.balance = 1500;
                 PlayerManager.location = 0;
-                PlayerManager.ownedProperties = new bool[40];
             }
             // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
             DontDestroyOnLoad(this.gameObject);

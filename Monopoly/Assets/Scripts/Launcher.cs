@@ -194,9 +194,10 @@ namespace Monopoly
             SwitchPanels(lobbyPanel);
             playerList = PhotonNetwork.PlayerList;
 
-            // Set custom player property as not bankrupt
+            // Set custom player properties
             ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
             hash.Add("Bankrupt", false);
+            hash.Add("OwnedProperties", new bool[40]);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
             
             UpdateTexts();

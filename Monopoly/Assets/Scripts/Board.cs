@@ -12,6 +12,7 @@ namespace Monopoly
         public List<Location> locations;
         public List<Card> chanceCards;
         public List<Card> communityChestCards;
+        public float lerpSpeed = 2f;
 
         public void RemovePiece(GameObject piece)
         {
@@ -20,7 +21,8 @@ namespace Monopoly
 
         public void MovePiece(GameObject piece, int location)
         {
-            piece.transform.position = locations[location].gridPoint;
+            Vector3 newLocation = locations[location].gridPoint;
+            piece.transform.position = Vector3.Lerp(piece.transform.position, newLocation, lerpSpeed*Time.deltaTime);
         }
 
         public void SetUpLocations()
@@ -111,6 +113,28 @@ namespace Monopoly
                 .Select(x => new { value = x, order = rand.Next() })
                 .OrderBy(x => x.order)
                 .Select(x => x.value).ToList();
+        }
+
+        public Card DrawChance()
+        {
+            Card first = chanceCards[0];
+            // Draw card from "top" of deck and put it on the bottom
+            for (int i = 1; i < chanceCards.Count; i++) {
+                chanceCards[i-1] = chanceCards[i];
+            }
+            chanceCards[chanceCards.Count-1] = first;
+            return first;
+        }
+
+        public Card DrawCommunityChest()
+        {
+            Card first = communityChestCards[0];
+            // Draw card from "top" of deck and put it on the bottom
+            for (int i = 1; i < communityChestCards.Count; i++) {
+                communityChestCards[i-1] = communityChestCards[i];
+            }
+            communityChestCards[communityChestCards.Count-1] = first;
+            return first;
         }
     }
 }
