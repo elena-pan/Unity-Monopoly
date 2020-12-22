@@ -5,15 +5,22 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 namespace Monopoly
 {
-    public class Launcher : MonoBehaviourPunCallbacks
+    public enum GamePieces
+    {
+        cannon, car, iron, locomotive, thimble, topHat, wheelbarrow
+    }
+    public class Launcher : MonoBehaviourPunCallbacks, IOnEventCallback
     {
 
         /// This client's version number. Users are separated from each other by gameVersion
         string gameVersion = "1";
         private int numPlayers = 4;
+        public const byte PiecesUpdateCode = 5;
+        public const byte PieceAssignmentCode = 6;
 
         [SerializeField]
         private GameObject startingPanel;
@@ -52,6 +59,7 @@ namespace Monopoly
         private Button joinGameButton;
 
         public Player[] playerList;
+        public List<int> pieces;
 
         void Awake()
         {
@@ -63,6 +71,7 @@ namespace Monopoly
         {
             SwitchPanels(connectingPanel);
             Connect();
+
             numPlayersDropdown.ClearOptions();
             List<string> options = new List<string>();
             options.Add("2");
@@ -199,12 +208,29 @@ namespace Monopoly
             hash.Add("Bankrupt", false);
             hash.Add("OwnedProperties", new bool[40]);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+            if (PhotonNetwork.IsMasterClient) {
+                pieces = new List<int>();
+                //pieces.Add(0); // Comment out since master client will take this piece
+                pieces.Add(1);
+                pieces.Add(2);
+                pieces.Add(3);
+                pieces.Add(4);
+                pieces.Add(5);
+                pieces.Add(6);
+            }
             
             UpdateTexts();
         }
 
         public override void OnPlayerEnteredRoom(Player other)
         {
+            if (PhotonNetwork.IsMasterClient) {
+                int[] target = new int[] {other.ActorNumber};
+                SendPhotonEvent(PieceAssignmentCode, pieces[0], target);
+                pieces.RemoveAt(0);
+                SendPhotonEvent(PiecesUpdateCode, pieces);
+            }
             playerList = PhotonNetwork.PlayerList;
             UpdateTexts();
         }
@@ -212,6 +238,10 @@ namespace Monopoly
 
         public override void OnPlayerLeftRoom(Player other)
         {
+            if (PhotonNetwork.IsMasterClient) {
+                pieces.Add((int)other.CustomProperties["Gamepiece"]);
+                SendPhotonEvent(PiecesUpdateCode, pieces);
+            }
             playerList = PhotonNetwork.PlayerList;
             UpdateTexts();
         }
@@ -219,6 +249,40 @@ namespace Monopoly
         public override void OnConnectedToMaster()
         {
             SwitchPanels(startingPanel);
+        }
+
+        public void OnEvent(EventData photonEvent)
+        {
+            byte eventCode = photonEvent.Code;
+            switch (eventCode) {
+                case PiecesUpdateCode:
+                    pieces = (List<int>)photonEvent.CustomData;
+                    break;
+                case PieceAssignmentCode:
+                    ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+                    hash.Add("Gamepiece", (int)photonEvent.CustomData);
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+                    break;
+            }
+        }
+
+        private void SendPhotonEvent(byte eventCode, object content, int[] targetActors = null)
+        {
+            RaiseEventOptions raiseEventOptions = raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; // Set Receivers to All to receive this event on the local client as well
+            if (targetActors != null && targetActors.Length != 0) {
+                raiseEventOptions = new RaiseEventOptions { TargetActors = targetActors }; // Send to specific clients
+            }
+            PhotonNetwork.RaiseEvent(eventCode, content, raiseEventOptions, SendOptions.SendReliable);
+        }
+
+        private void OnEnable()
+        {
+            PhotonNetwork.AddCallbackTarget(this);
+        }
+
+        private void OnDisable()
+        {
+            PhotonNetwork.RemoveCallbackTarget(this);
         }
 
     }

@@ -17,9 +17,9 @@ namespace Monopoly
         public const byte PlayerTurnCode = 2;
         public const byte ReceiveMoneyCode = 3;
         public const byte PropertyChangeCode = 4;
-        
-        public Board board;
+    
         public Dice dice;
+        public Board board;
 
         public int currentPlayer;
         public Player[] players;
@@ -31,7 +31,7 @@ namespace Monopoly
         public GameObject thimble; 
         public GameObject topHat;
         public GameObject wheelbarrow;
-        public List<GameObject> pieces;
+        public GameObject[] pieces;
 
         public GameObject house;
         public GameObject hotel;
@@ -45,17 +45,9 @@ namespace Monopoly
 
         void Start ()
         {
+            pieces = new GameObject[] {cannon, car, iron, locomotive, thimble, topHat, wheelbarrow};
             currentPlayer = 0;
             players = PhotonNetwork.PlayerList;
-
-            pieces = new List<GameObject>();
-            pieces.Add(cannon);
-            pieces.Add(car);
-            pieces.Add(iron);
-            pieces.Add(locomotive);
-            pieces.Add(thimble);
-            pieces.Add(topHat);
-            pieces.Add(wheelbarrow);
 
             DisableButton("buyPropertyButton");
             DisableButton("buildHouseButton");
@@ -65,17 +57,21 @@ namespace Monopoly
             if (PlayerManager.LocalPlayerInstance == null)
             {
                 // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-                PhotonNetwork.Instantiate(pieces[0].name, board.locations[0].gridPoint, Quaternion.identity, 0);
+                // int pieceNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["Gamepiece"];
+                // PhotonNetwork.Instantiate(pieces[pieceNum].name, board.locations[0].gridPoint, Quaternion.identity, 0);
             }
 
             SetupBoard();
+
+            if (PhotonNetwork.IsMasterClient) {
+                NextPlayer();
+            }
         }
 
         private void SetupBoard()
         {
             board.SetUpLocations();
             board.SetUpCards();
-            NextPlayer();
         }
 
         public void Move(int steps)
@@ -91,7 +87,6 @@ namespace Monopoly
             MoveToLocation(location);
             
             LandedOn(steps);
-            //NextPlayer();
         }
 
         public void MoveToLocation(int location)
@@ -432,6 +427,21 @@ namespace Monopoly
                     }
                     break;
             }
+        }
+
+        public void buyProperty()
+        {
+
+        }
+
+        public void buildHouse()
+        {
+
+        }
+
+        public void sellProperty(int property)
+        {
+
         }
 
         private void DisableButton(string button)

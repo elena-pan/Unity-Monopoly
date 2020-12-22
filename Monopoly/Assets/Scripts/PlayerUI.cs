@@ -37,7 +37,7 @@ namespace Monopoly
         {
             // Update player stats
             if (statsBody != null) {
-                string temp = "Balance: " + PlayerManager.balance.ToString() + "\nGamepiece: " + PlayerManager.LocalPlayerInstance.name;
+                string temp = "Balance: " + PlayerManager.balance.ToString() + "\nGamepiece: " + PhotonNetwork.LocalPlayer.NickName;
                 if ((bool)PhotonNetwork.LocalPlayer.CustomProperties["Bankrupt"] == false) {
                     temp = temp + "\nBankrupt: " + "No";
                 } else {
