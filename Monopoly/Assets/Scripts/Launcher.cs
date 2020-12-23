@@ -18,7 +18,7 @@ namespace Monopoly
 
         /// This client's version number. Users are separated from each other by gameVersion
         string gameVersion = "1";
-        private int numPlayers = 4;
+        private int maxPlayers = 7; // Only have 7 gamepieces
         public const byte PiecesUpdateCode = 5;
         public const byte PieceAssignmentCode = 6;
 
@@ -48,8 +48,8 @@ namespace Monopoly
         private InputField joinGameNameInput;
         [SerializeField]
         private InputField createGameNameInput;
-        [SerializeField]
-        private Dropdown numPlayersDropdown;
+        /*[SerializeField]
+        private Dropdown numPlayersDropdown;*/
 
         [SerializeField]
         private Button startGameButton;
@@ -72,6 +72,7 @@ namespace Monopoly
             SwitchPanels(connectingPanel);
             Connect();
 
+            /*
             numPlayersDropdown.ClearOptions();
             List<string> options = new List<string>();
             options.Add("2");
@@ -83,7 +84,7 @@ namespace Monopoly
 
             numPlayersDropdown.AddOptions(options);
             numPlayersDropdown.value = numPlayers-2;
-            numPlayersDropdown.RefreshShownValue();
+            numPlayersDropdown.RefreshShownValue();*/
         }
 
         void Update()
@@ -124,7 +125,7 @@ namespace Monopoly
         {
             Connect();
             SwitchPanels(connectingPanel);
-            PhotonNetwork.CreateRoom(createGameNameInput.text, new RoomOptions { MaxPlayers = (byte)numPlayers });
+            PhotonNetwork.CreateRoom(createGameNameInput.text, new RoomOptions { MaxPlayers = (byte)maxPlayers });
         }
 
         public void StartGame()
@@ -153,7 +154,7 @@ namespace Monopoly
 
             if (PhotonNetwork.IsMasterClient) {
                 startGameButton.gameObject.SetActive(true);
-                if (PhotonNetwork.CurrentRoom.PlayerCount == numPlayers) {
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= 2) {
                     startGameButton.interactable = true;
                 } else {
                     startGameButton.interactable = false;
@@ -165,7 +166,7 @@ namespace Monopoly
 
         private void UpdateTexts()
         {
-            numPlayersText.text = "("+PhotonNetwork.CurrentRoom.PlayerCount.ToString()+"/"+numPlayers.ToString()+")";
+            numPlayersText.text = "("+PhotonNetwork.CurrentRoom.PlayerCount.ToString()+"/7)";
             hostText.text = "";
             joinedPlayersText.text = "";
             foreach(Player player in playerList) {
@@ -176,9 +177,10 @@ namespace Monopoly
             }
         }
 
+        /*
         private void OnClickDropdownOption(Dropdown change) {
             numPlayers = change.value+2;
-        }
+        }*/
 
         public override void OnDisconnected(DisconnectCause cause)
         {

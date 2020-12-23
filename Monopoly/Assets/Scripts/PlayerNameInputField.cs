@@ -31,7 +31,7 @@ namespace Monopoly
         /// Sets the name of the player, and save it in the PlayerPrefs for future sessions.
         public void SetPlayerName(string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value == null)
             {
                 return;
             }

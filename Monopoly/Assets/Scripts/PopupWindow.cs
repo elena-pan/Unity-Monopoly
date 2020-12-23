@@ -10,6 +10,11 @@ namespace Monopoly
         [SerializeField]
         private Text windowText;
 
+        public void DisplayText(string text) {
+            windowText.text = text;
+            this.gameObject.SetActive(true);
+        }
+
         public void DisplayOwnedProperties()
         {
             string text = "<b>My Properties</b>";
