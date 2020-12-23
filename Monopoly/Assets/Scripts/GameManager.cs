@@ -37,6 +37,8 @@ namespace Monopoly
         public GameObject hotel;
 
         public GameObject PlayerUi;
+        public GameObject popUpWindow;
+        public GameObject noMoneyOptions;
         
         void Awake()
         {
@@ -65,6 +67,16 @@ namespace Monopoly
 
             if (PhotonNetwork.IsMasterClient) {
                 NextPlayer();
+            }
+        }
+
+        void Update()
+        {
+            if (PlayerManager.noMoneyAmount > 0) {
+                DisableButton("buyPropertyButton");
+                DisableButton("buildHouseButton");
+                DisableButton("sellHouseButton");
+                DisableButton("endTurnButton");
             }
         }
 
@@ -159,7 +171,11 @@ namespace Monopoly
             }
             else if (board.locations[PlayerManager.location] is Tax) {
                 Tax currentLocation = (Tax)board.locations[PlayerManager.location];
-                PayMoney(currentLocation.tax);
+                bool paid = PayMoney(currentLocation.tax);
+                if (paid) {
+                    string text = "paid $" + currentLocation.tax + " in taxes";
+                    SendActivityMessage(text, PhotonNetwork.LocalPlayer);
+                }
             }
             else if (board.locations[PlayerManager.location] is Location) {
                 switch(board.locations[PlayerManager.location].name) {
@@ -171,11 +187,11 @@ namespace Monopoly
                     case "Free Parking":
                         break;
                     case "Go To Jail":
+                        MoveToLocation(10);
+                        LandedOn();
+
                         bool paid = PayMoney(50);
                         if (paid) {
-                            MoveToLocation(10);
-                            LandedOn();
-
                             int amountPaid = 50;
                             string paidMessage = "paid $" + amountPaid.ToString();
                             SendActivityMessage(paidMessage, PhotonNetwork.LocalPlayer);
@@ -262,10 +278,15 @@ namespace Monopoly
         {
             if (players[currentPlayer] == PhotonNetwork.LocalPlayer)
             {
+                popUpWindow.SendMessage("DisplayText", "It's your turn!", SendMessageOptions.RequireReceiver);
                 StartCoroutine(WaitForDiceRoll(diceNum => {
                     EnableButton("endTurnButton");
                     Move(diceNum);
                 }));
+            }
+            else {
+                string text = "It's " + players[currentPlayer].NickName + "'s turn!";
+                popUpWindow.SendMessage("DisplayText", text, SendMessageOptions.RequireReceiver);
             }
         }
 
@@ -278,8 +299,8 @@ namespace Monopoly
         {
 
             if (PlayerManager.balance < amount) {
-                bool paid = NoMoney(amount);
-                if (paid == false) return false;
+                NoMoney();
+                return false;
             }
 
             PlayerManager.balance -= amount;
@@ -290,9 +311,34 @@ namespace Monopoly
             return true;
         }
 
-        public bool NoMoney(int amount)
+        public void NoMoney()
         {
-            return true;
+            int amountFromProperties = 0;
+            bool[] ownedProperties = (bool[])PhotonNetwork.LocalPlayer.CustomProperties["OwnedProperties"];
+            for (int i = 0; i < 40; i++) {
+                if (ownedProperties[i] == true) {
+                    if (board.locations[i] is Property) {
+                        Property property = (Property)board.locations[i];
+                        amountFromProperties += (0.5*property.price);
+                        amountFromProperties += (0.5*property.housePrice*property.numHouses);
+                    }
+                    else if (board.locations[i] is Utility) {
+                        Utility property = (Utility)board.locations[i];
+                        amountFromProperties += (0.5*property.price);
+                    }
+                    else {
+                        Railroad property = (Railroad)board.locations[i];
+                        amountFromProperties += (0.5*property.price);
+                    }
+                }
+            }
+
+            if (amountFromProperties >= amount) {
+                PlayerManager.noMoneyAmount = amount;
+                noMoneyOptions.SetActive(true);
+            } else {
+                Bankrupt();
+            }
         }
 
         public void Bankrupt()
