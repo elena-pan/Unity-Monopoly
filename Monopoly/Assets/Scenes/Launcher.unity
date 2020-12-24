@@ -1701,7 +1701,6 @@ GameObject:
   - component: {fileID: 664140166}
   - component: {fileID: 664140165}
   - component: {fileID: 664140164}
-  - component: {fileID: 664140163}
   m_Layer: 5
   m_Name: Join Game Name InputField
   m_TagString: Untagged
@@ -1730,18 +1729,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 35}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &664140163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 664140161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4141141f87f9b54199f5e42347fc209, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &664140164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2665,7 +2652,6 @@ GameObject:
   - component: {fileID: 1239536335}
   - component: {fileID: 1239536334}
   - component: {fileID: 1239536333}
-  - component: {fileID: 1239536332}
   m_Layer: 5
   m_Name: Create Game Name InputField
   m_TagString: Untagged
@@ -2694,18 +2680,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1239536332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1239536330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4141141f87f9b54199f5e42347fc209, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1239536333
 MonoBehaviour:
   m_ObjectHideFlags: 0

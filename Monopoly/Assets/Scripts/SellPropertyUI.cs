@@ -9,22 +9,65 @@ namespace Monopoly
     public class SellPropertyUI : MonoBehaviour
     {
         [SerializeField]
-        private Button sellPropertyButton;
-        [SerializeField]
         private Dropdown propertyDropdown;
 
-        public void updateDropdownOptions()
+        private List<int> ownedProperties;
+        private int currentDropdown;
+
+        void OnEnabled()
+        {
+            UpdateDropdownOptions();
+        }
+
+        public void SellPropertyClicked()
+        {
+            GameManager.instance.SellProperty(ownedProperties[currentDropdown]);
+            this.gameObject.SetActive(false);
+        }
+
+        public void SellPropertyNoMoneyClicked()
+        {
+            SellPropertyClicked();
+            GameManager.instance.SoldPropertyNoMoney();
+        }
+        public void UpdateDropdownOptions()
         {
             propertyDropdown.ClearOptions();
             List<string> options = new List<string>();
-            options.Add("2");
+            ownedProperties = new List<int>();
+
+            bool[] ownedProp = (bool[])PhotonNetwork.LocalPlayer.CustomProperties["OwnedProperties"];
+            for (int i = 0; i < 40; i++) {
+                if (ownedProp[i] == true) {
+                    string dropDownText = GameManager.instance.board.locations[i].name;
+                    int price = 0;
+                    // Calculate sell price
+                    if (GameManager.instance.board.locations[i] is Property) {
+                        Property property = (Property)GameManager.instance.board.locations[i];
+                        price = (int)(0.5*property.price);
+                        price += (int)(0.5*property.housePrice*property.numHouses);
+                    }
+                    else if (GameManager.instance.board.locations[i] is Utility) {
+                        Utility property = (Utility)GameManager.instance.board.locations[i];
+                        price = (int)(0.5*property.price);
+                    }
+                    else if (GameManager.instance.board.locations[i] is Railroad) {
+                        Railroad property = (Railroad)GameManager.instance.board.locations[i];
+                        price = (int)(0.5*property.price);
+                    }
+
+                    dropDownText = dropDownText + " - $" + price.ToString();
+                    options.Add(dropDownText);
+                    ownedProperties.Add(i);
+                }
+            }
 
             propertyDropdown.AddOptions(options);
             propertyDropdown.value = 0;
             propertyDropdown.RefreshShownValue();
         }
-        public void OnClickDropdownOption(Dropdown change) {
-            Debug.Log(change);
+        public void OnClickDropdownOption(Dropdown dropdown) {
+            currentDropdown = dropdown.value;
         }
 
     }

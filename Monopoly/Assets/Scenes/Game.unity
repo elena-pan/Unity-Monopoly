@@ -526,7 +526,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -80}
+  m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 310, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &43527976
@@ -831,7 +831,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 48153046}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1644857058}
+        m_MethodName: SellPropertyNoMoneyClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &48153046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1544,7 +1555,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -25}
+  m_AnchoredPosition: {x: 0, y: -45}
   m_SizeDelta: {x: 310, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &107610535
@@ -2531,12 +2542,12 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1840530834}
+        m_MethodName: OnClickDropdownOption
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgument: {fileID: 181552161}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Dropdown, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2855,8 +2866,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -87.5, y: -62.5}
-  m_SizeDelta: {x: 350, y: 280}
+  m_AnchoredPosition: {x: -87.5, y: -70}
+  m_SizeDelta: {x: 350, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &199220425
 MonoBehaviour:
@@ -6693,7 +6704,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20, y: -70}
+  m_AnchoredPosition: {x: 20, y: -60}
   m_SizeDelta: {x: 350, y: 280}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &764366186
@@ -6730,7 +6741,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Gamepiece:
 
-    Balance:'
+    Balance:
+
+    Bankrupt:'
 --- !u!222 &764366187
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7333,6 +7346,7 @@ GameObject:
   - component: {fileID: 875859443}
   - component: {fileID: 875859445}
   - component: {fileID: 875859444}
+  - component: {fileID: 875859446}
   m_Layer: 5
   m_Name: PropertiesListPanel
   m_TagString: Untagged
@@ -7421,6 +7435,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 875859442}
   m_CullTransparentMesh: 0
+--- !u!114 &875859446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875859442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b656a623b79a324180d337dfd1ffa2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &882979564
 GameObject:
   m_ObjectHideFlags: 0
@@ -9291,7 +9317,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1240509892}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1840530834}
+        m_MethodName: SellPropertyClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1240509892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10373,7 +10410,18 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1644857058}
+        m_MethodName: OnClickDropdownOption
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Dropdown, UnityEngine.UI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &1390389369
 MonoBehaviour:
@@ -10730,7 +10778,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 1
+    m_FontSize: 30
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
@@ -10969,6 +11017,7 @@ GameObject:
   - component: {fileID: 1494848743}
   - component: {fileID: 1494848745}
   - component: {fileID: 1494848744}
+  - component: {fileID: 1494848746}
   m_Layer: 5
   m_Name: No Money Options Panel
   m_TagString: Untagged
@@ -11035,6 +11084,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1494848742}
   m_CullTransparentMesh: 0
+--- !u!114 &1494848746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494848742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b656a623b79a324180d337dfd1ffa2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1496212028
 GameObject:
   m_ObjectHideFlags: 0
@@ -12287,6 +12348,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1644857057}
+  - component: {fileID: 1644857058}
+  - component: {fileID: 1644857059}
   m_Layer: 5
   m_Name: SellPropertyNoMoneyPanel
   m_TagString: Untagged
@@ -12317,6 +12380,31 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1644857058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644857056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c127655a26e31e4181d037cb121dda4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertyDropdown: {fileID: 1390389368}
+--- !u!114 &1644857059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644857056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b656a623b79a324180d337dfd1ffa2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1653787456
 GameObject:
   m_ObjectHideFlags: 0
@@ -13812,7 +13900,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20, y: -30}
+  m_AnchoredPosition: {x: 20, y: -20}
   m_SizeDelta: {x: 350, y: 280}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1774808073
@@ -14786,6 +14874,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1840530833}
   - component: {fileID: 1840530834}
+  - component: {fileID: 1840530835}
   m_Layer: 5
   m_Name: SellPropertyPanel
   m_TagString: Untagged
@@ -14828,8 +14917,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c127655a26e31e4181d037cb121dda4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sellPropertyButton: {fileID: 1240509891}
   propertyDropdown: {fileID: 181552161}
+--- !u!114 &1840530835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840530832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b656a623b79a324180d337dfd1ffa2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1841884822
 GameObject:
   m_ObjectHideFlags: 0
@@ -15232,6 +15332,7 @@ GameObject:
   - component: {fileID: 1920352222}
   - component: {fileID: 1920352221}
   - component: {fileID: 1920352223}
+  - component: {fileID: 1920352224}
   m_Layer: 5
   m_Name: PopupWindow
   m_TagString: Untagged
@@ -15248,7 +15349,7 @@ RectTransform:
   m_GameObject: {fileID: 1920352219}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.6, z: 0.5}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.5}
   m_Children:
   - {fileID: 592117366}
   - {fileID: 505695230}
@@ -15310,6 +15411,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   windowText: {fileID: 592117367}
+--- !u!114 &1920352224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920352219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b656a623b79a324180d337dfd1ffa2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1924703694
 GameObject:
   m_ObjectHideFlags: 0

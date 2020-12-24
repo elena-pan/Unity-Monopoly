@@ -220,6 +220,10 @@ namespace Monopoly
                 pieces.Add(4);
                 pieces.Add(5);
                 pieces.Add(6);
+
+                ExitGames.Client.Photon.Hashtable hash2 = new ExitGames.Client.Photon.Hashtable();
+                hash2.Add("Gamepiece", 0);
+                PhotonNetwork.LocalPlayer.SetCustomProperties(hash2);
             }
             
             UpdateTexts();

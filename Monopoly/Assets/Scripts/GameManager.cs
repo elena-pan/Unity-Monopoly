@@ -54,15 +54,15 @@ namespace Monopoly
             DisableButton("buyPropertyButton");
             DisableButton("buildHouseButton");
             DisableButton("endTurnButton");
+            
+            SetupBoard();
 
             if (PlayerManager.LocalPlayerInstance == null)
             {
                 // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-                // int pieceNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["Gamepiece"];
-                // PhotonNetwork.Instantiate(pieces[pieceNum].name, board.locations[0].gridPoint, Quaternion.identity, 0);
+                int pieceNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["Gamepiece"];
+                PhotonNetwork.Instantiate(pieces[pieceNum].name, board.locations[0].gridPoint, Quaternion.identity, 0);
             }
-
-            SetupBoard();
 
             if (PhotonNetwork.IsMasterClient) {
                 NextPlayer();
@@ -266,7 +266,8 @@ namespace Monopoly
         {
             if (players[currentPlayer] == PhotonNetwork.LocalPlayer)
             {
-                popUpWindow.SendMessage("DisplayText", "It's your turn!", SendMessageOptions.RequireReceiver);
+                popUpWindow.SetActive(true);
+                popUpWindow.SendMessage("DisplayText", "It's your turn! Press space to roll the dice", SendMessageOptions.RequireReceiver);
                 StartCoroutine(WaitForDiceRoll(diceNum => {
                     EnableButton("endTurnButton");
                     Move(diceNum);
@@ -274,6 +275,7 @@ namespace Monopoly
             }
             else {
                 string text = "It's " + players[currentPlayer].NickName + "'s turn!";
+                popUpWindow.SetActive(true);
                 popUpWindow.SendMessage("DisplayText", text, SendMessageOptions.RequireReceiver);
             }
         }
@@ -544,7 +546,7 @@ namespace Monopoly
             DisableButton("buildHouseButton");
         }
 
-        public void sellProperty(int property)
+        public void SellProperty(int property)
         {
             if (board.locations[PlayerManager.location] is Property) {
                 Property boughtProperty = (Property)board.locations[PlayerManager.location];
