@@ -73,7 +73,7 @@ namespace Monopoly
                 case "buildHouseButton":
                     buildHouseButton.interactable = true;
                     break;
-                case "sellHouseButton":
+                case "sellPropertyButton":
                     sellHouseButton.interactable = true;
                     break;
                 case "endTurnButton":
@@ -91,7 +91,7 @@ namespace Monopoly
                 case "buildHouseButton":
                     buildHouseButton.interactable = false;
                     break;
-                case "sellHouseButton":
+                case "sellPropertyButton":
                     sellHouseButton.interactable = false;
                     break;
                 case "endTurnButton":

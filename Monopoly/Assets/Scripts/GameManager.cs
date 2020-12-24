@@ -53,7 +53,6 @@ namespace Monopoly
 
             DisableButton("buyPropertyButton");
             DisableButton("buildHouseButton");
-            DisableButton("sellHouseButton");
             DisableButton("endTurnButton");
 
             if (PlayerManager.LocalPlayerInstance == null)
@@ -67,16 +66,6 @@ namespace Monopoly
 
             if (PhotonNetwork.IsMasterClient) {
                 NextPlayer();
-            }
-        }
-
-        void Update()
-        {
-            if (PlayerManager.noMoneyAmount > 0) {
-                DisableButton("buyPropertyButton");
-                DisableButton("buildHouseButton");
-                DisableButton("sellHouseButton");
-                DisableButton("endTurnButton");
             }
         }
 
@@ -241,7 +230,6 @@ namespace Monopoly
         {
             DisableButton("buyPropertyButton");
             DisableButton("buildHouseButton");
-            DisableButton("sellHouseButton");
             DisableButton("endTurnButton");
 
             // Check how many players are bankrupt
@@ -299,7 +287,7 @@ namespace Monopoly
         {
 
             if (PlayerManager.balance < amount) {
-                NoMoney();
+                NoMoney(amount);
                 return false;
             }
 
@@ -311,24 +299,29 @@ namespace Monopoly
             return true;
         }
 
-        public void NoMoney()
+        public void NoMoney(int amount)
         {
+            DisableButton("buyPropertyButton");
+            DisableButton("buildHouseButton");
+            DisableButton("sellPropertyButton");
+            DisableButton("endTurnButton");
+
             int amountFromProperties = 0;
             bool[] ownedProperties = (bool[])PhotonNetwork.LocalPlayer.CustomProperties["OwnedProperties"];
             for (int i = 0; i < 40; i++) {
                 if (ownedProperties[i] == true) {
                     if (board.locations[i] is Property) {
                         Property property = (Property)board.locations[i];
-                        amountFromProperties += (0.5*property.price);
-                        amountFromProperties += (0.5*property.housePrice*property.numHouses);
+                        amountFromProperties += (int)(0.5*property.price);
+                        amountFromProperties += (int)(0.5*property.housePrice*property.numHouses);
                     }
                     else if (board.locations[i] is Utility) {
                         Utility property = (Utility)board.locations[i];
-                        amountFromProperties += (0.5*property.price);
+                        amountFromProperties += (int)(0.5*property.price);
                     }
                     else {
                         Railroad property = (Railroad)board.locations[i];
-                        amountFromProperties += (0.5*property.price);
+                        amountFromProperties += (int)(0.5*property.price);
                     }
                 }
             }
@@ -338,6 +331,22 @@ namespace Monopoly
                 noMoneyOptions.SetActive(true);
             } else {
                 Bankrupt();
+            }
+        }
+
+        public void SoldPropertyNoMoney()
+        {
+            if (PlayerManager.balance >= PlayerManager.noMoneyAmount) {
+                string paidMessage = "paid $" + PlayerManager.noMoneyAmount.ToString();
+                SendActivityMessage(paidMessage, PhotonNetwork.LocalPlayer);
+                PlayerManager.balance -= PlayerManager.noMoneyAmount;
+                PlayerManager.noMoneyAmount = 0;
+                
+                EnableButton("sellPropertyButton");
+                EnableButton("endTurnButton");
+            }
+            else {
+                NoMoney(PlayerManager.noMoneyAmount);
             }
         }
 
@@ -476,8 +485,8 @@ namespace Monopoly
                                 temp.owner = null;
                             } else temp.owner = (Player)data[2];
                             board.locations[location]= temp;
-                        } else if (property == "numHouses") {
-                            temp.numHouses = (int)data[2];
+                        } else if (property == "buildHouse") {
+                            temp.BuildHouse();
                         } else if (property == "reset") {
                             temp.Reset();
                         }
@@ -526,7 +535,7 @@ namespace Monopoly
             int numHouses = property.numHouses + 1;
 
             // This will change the property on our local player since the message is also sent to us
-            object[] data = new object[] {PlayerManager.location, "numHouses", numHouses};
+            object[] data = new object[] {PlayerManager.location, "buildHouse"};
             SendEvent(PropertyChangeCode, data);
 
             // Send activity message as well
