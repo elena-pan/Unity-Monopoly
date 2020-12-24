@@ -53,6 +53,7 @@ namespace Monopoly
 
             DisableButton("buyPropertyButton");
             DisableButton("buildHouseButton");
+            DisableButton("sellPropertyButton");
             DisableButton("endTurnButton");
             
             SetupBoard();
@@ -66,6 +67,17 @@ namespace Monopoly
 
             if (PhotonNetwork.IsMasterClient) {
                 NextPlayer();
+            }
+        }
+
+        void Update()
+        {
+            if (HasProperties) 
+            {
+                EnableButton("sellPropertyButton");
+            }
+            else {
+                DisableButton("sellPropertyButton");
             }
         }
 
@@ -99,7 +111,7 @@ namespace Monopoly
         public void LandedOn(int? diceRoll = null)
         {
             string landedOnText = "landed on " + board.locations[PlayerManager.location].name;
-            SendActivityMessage(landedOnText, PhotonNetwork.LocalPlayer);
+            SendActivityMessage(landedOnText, currentPlayer);
 
             if (board.locations[PlayerManager.location] is Property) {
                 Property currentLocation = (Property)board.locations[PlayerManager.location];
@@ -113,7 +125,7 @@ namespace Monopoly
                         bool paid = PayMoney(currentLocation.rent, currentLocation.owner);
                         if (paid) {
                             string text = "paid $" + currentLocation.rent + " in rent to " + currentLocation.owner.NickName;
-                            SendActivityMessage(text, PhotonNetwork.LocalPlayer);
+                            SendActivityMessage(text, currentPlayer);
                         }
                     } else { // By self
                         if (PlayerManager.balance >= currentLocation.price) {
@@ -136,7 +148,7 @@ namespace Monopoly
                         bool paid = PayMoney(rent, currentLocation.owner);
                         if (paid) {
                             string text = "paid $" + rent + " in rent to " + currentLocation.owner.NickName;
-                            SendActivityMessage(text, PhotonNetwork.LocalPlayer);
+                            SendActivityMessage(text, currentPlayer);
                         }
                     }
                 }
@@ -153,7 +165,7 @@ namespace Monopoly
                         bool paid = PayMoney(rent, currentLocation.owner);
                         if (paid) {
                             string text = "paid $" + rent + " in rent to " + currentLocation.owner.NickName;
-                            SendActivityMessage(text, PhotonNetwork.LocalPlayer);
+                            SendActivityMessage(text, currentPlayer);
                         }
                     }
                 }
@@ -163,7 +175,7 @@ namespace Monopoly
                 bool paid = PayMoney(currentLocation.tax);
                 if (paid) {
                     string text = "paid $" + currentLocation.tax + " in taxes";
-                    SendActivityMessage(text, PhotonNetwork.LocalPlayer);
+                    SendActivityMessage(text, currentPlayer);
                 }
             }
             else if (board.locations[PlayerManager.location] is Location) {
@@ -183,7 +195,7 @@ namespace Monopoly
                         if (paid) {
                             int amountPaid = 50;
                             string paidMessage = "paid $" + amountPaid.ToString();
-                            SendActivityMessage(paidMessage, PhotonNetwork.LocalPlayer);
+                            SendActivityMessage(paidMessage, currentPlayer);
                         }
                         break;
                     case "Chance":
@@ -336,11 +348,22 @@ namespace Monopoly
             }
         }
 
+        public void HasProperties()
+        {
+            bool[] ownedProperties = (bool[])PhotonNetwork.LocalPlayer.CustomProperties["OwnedProperties"];
+            for (int i = 0; i < 40; i++) {
+                if (ownedProperties[i] == true) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void SoldPropertyNoMoney()
         {
             if (PlayerManager.balance >= PlayerManager.noMoneyAmount) {
                 string paidMessage = "paid $" + PlayerManager.noMoneyAmount.ToString();
-                SendActivityMessage(paidMessage, PhotonNetwork.LocalPlayer);
+                SendActivityMessage(paidMessage, currentPlayer);
                 PlayerManager.balance -= PlayerManager.noMoneyAmount;
                 PlayerManager.noMoneyAmount = 0;
                 
@@ -358,7 +381,7 @@ namespace Monopoly
             ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
             hash.Add("Bankrupt", true);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-            SendActivityMessage("went bankrupt!", PhotonNetwork.LocalPlayer);
+            SendActivityMessage("went bankrupt!", currentPlayer);
             NextPlayer();
         }
 
@@ -412,7 +435,7 @@ namespace Monopoly
             PlayerUi.SendMessage ("AddActivityText", text, SendMessageOptions.RequireReceiver);
         }
 
-        public void SendActivityMessage(string content, Player player = null)
+        public void SendActivityMessage(string content, int? player = null)
         {
             object[] data = new object[] {player, content};
             SendEvent(SendNewActivityLineCode, data);
@@ -424,7 +447,7 @@ namespace Monopoly
             if (arr[0] == null) {
                 PlayerUi.SendMessage ("AddActivityText", content, SendMessageOptions.RequireReceiver);
             } else {
-                Player player = (Player)arr[0];
+                Player player = players[(int)arr[0]];
                 string text;
                 if (player == PhotonNetwork.LocalPlayer) {
                     text = "You " + content;
@@ -469,7 +492,7 @@ namespace Monopoly
                         if (property == "owner") {
                             if (data[2] == null) {
                                 temp.owner = null;
-                            } else temp.owner = (Player)data[2];
+                            } else temp.owner = players[(int)data[2]];
                         }
                         board.locations[location]= temp;
                     } else if (board.locations[location] is Railroad) {
@@ -477,7 +500,7 @@ namespace Monopoly
                         if (property == "owner") {
                             if (data[2] == null) {
                                 temp.owner = null;
-                            } else temp.owner = (Player)data[2];
+                            } else temp.owner = players[(int)data[2]];
                         }
                         board.locations[location]= temp;
                     } else if (board.locations[location] is Property) {
@@ -485,7 +508,7 @@ namespace Monopoly
                         if (property == "owner") {
                             if (data[2] == null) {
                                 temp.owner = null;
-                            } else temp.owner = (Player)data[2];
+                            } else temp.owner = players[(int)data[2]];
                             board.locations[location]= temp;
                         } else if (property == "buildHouse") {
                             temp.BuildHouse();
@@ -521,11 +544,11 @@ namespace Monopoly
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
             // This will change the property on our local player since the message is also sent to us
-            object[] data = new object[] {PlayerManager.location, "owner", PhotonNetwork.LocalPlayer};
+            object[] data = new object[] {PlayerManager.location, "owner", currentPlayer};
             SendEvent(PropertyChangeCode, data);
             // Send activity message as well
             string text = "bought " + board.locations[PlayerManager.location].name;
-            SendActivityMessage(text, PhotonNetwork.LocalPlayer);
+            SendActivityMessage(text, currentPlayer);
 
             DisableButton("buyPropertyButton");
         }
@@ -542,7 +565,7 @@ namespace Monopoly
 
             // Send activity message as well
             string text = "built a house on " + property.name;
-            SendActivityMessage(text, PhotonNetwork.LocalPlayer);
+            SendActivityMessage(text, currentPlayer);
             DisableButton("buildHouseButton");
         }
 
@@ -581,7 +604,13 @@ namespace Monopoly
             
             // Send activity message as well
             string text = "sold " + board.locations[PlayerManager.location].name;
-            SendActivityMessage(text, PhotonNetwork.LocalPlayer);
+            int localPlayer = 0;
+            for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++) {
+                if (players[i] == PhotonNetwork.LocalPlayer) {
+                    localPlayer = i;
+                }
+            }
+            SendActivityMessage(text, localPlayer);
         }
 
         private void DisableButton(string button)

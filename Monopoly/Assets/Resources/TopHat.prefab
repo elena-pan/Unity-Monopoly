@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2226779989353113954}
   - component: {fileID: 7116976118651483125}
   - component: {fileID: -7029377695743158230}
+  - component: {fileID: 7268484356438682456}
   m_Layer: 0
   m_Name: TopHat
   m_TagString: Untagged
@@ -99,7 +100,8 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -7029377695743158230}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -119,3 +121,15 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &7268484356438682456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425555985520167095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ee0c4d3ebfb514e9440329975564bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

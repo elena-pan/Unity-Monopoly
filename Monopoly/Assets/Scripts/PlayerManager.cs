@@ -7,7 +7,7 @@ namespace Monopoly
 {
     public class PlayerManager : MonoBehaviourPunCallbacks
     {
-        public GameObject PlayerUi;
+        //public GameObject PlayerUi;
         // We make these variables static because we only need to know the stats of our local player
         public static GameObject LocalPlayerInstance;
         public static int location;
@@ -28,6 +28,7 @@ namespace Monopoly
             DontDestroyOnLoad(this.gameObject);
         }
 
+        /*
         void Start()
         {
             if (PlayerUi != null)
@@ -39,6 +40,6 @@ namespace Monopoly
             {
                 Debug.LogWarning("<Color=Red><a>Missing</a></Color> PlayerUiPrefab reference on player Prefab.", this);
             }
-        }
+        }*/
     }
 }

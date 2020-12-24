@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -235,7 +236,7 @@ namespace Monopoly
                 int[] target = new int[] {other.ActorNumber};
                 SendPhotonEvent(PieceAssignmentCode, pieces[0], target);
                 pieces.RemoveAt(0);
-                SendPhotonEvent(PiecesUpdateCode, pieces);
+                SendPhotonEvent(PiecesUpdateCode, pieces.ToArray());
             }
             playerList = PhotonNetwork.PlayerList;
             UpdateTexts();
@@ -262,7 +263,8 @@ namespace Monopoly
             byte eventCode = photonEvent.Code;
             switch (eventCode) {
                 case PiecesUpdateCode:
-                    pieces = (List<int>)photonEvent.CustomData;
+                    int[] temp = (int[])photonEvent.CustomData;
+                    pieces = temp.ToList();
                     break;
                 case PieceAssignmentCode:
                     ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();

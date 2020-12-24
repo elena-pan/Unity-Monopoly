@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4869647278627658702}
   - component: {fileID: 7237426642901823236}
   - component: {fileID: 2237765289991175301}
+  - component: {fileID: -6102106919614339944}
   - component: {fileID: 5390756415362470894}
   m_Layer: 0
   m_Name: Cannon
@@ -99,10 +100,23 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 5390756415362470894}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-6102106919614339944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9182977489812836049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ee0c4d3ebfb514e9440329975564bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5390756415362470894
 MonoBehaviour:
   m_ObjectHideFlags: 0

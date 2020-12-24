@@ -12,7 +12,7 @@ namespace Monopoly
         public List<Location> locations;
         public List<Card> chanceCards;
         public List<Card> communityChestCards;
-        public float lerpSpeed = 2f;
+        public float lerpSpeed = 30f;
 
         public void RemovePiece(GameObject piece)
         {

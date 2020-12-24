@@ -14,7 +14,7 @@ namespace Monopoly
         private List<int> ownedProperties;
         private int currentDropdown;
 
-        void OnEnabled()
+        void Update()
         {
             UpdateDropdownOptions();
         }

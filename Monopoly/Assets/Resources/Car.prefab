@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 598203449431652202}
   - component: {fileID: 3679957311473239714}
   - component: {fileID: -2783628949400051503}
+  - component: {fileID: 6397703127634385082}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -99,7 +100,8 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -2783628949400051503}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -119,3 +121,15 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &6397703127634385082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390981912983951039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ee0c4d3ebfb514e9440329975564bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
