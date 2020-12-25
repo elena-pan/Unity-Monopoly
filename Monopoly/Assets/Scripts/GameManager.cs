@@ -60,9 +60,11 @@ namespace Monopoly
 
             if (PlayerManager.LocalPlayerInstance == null)
             {
+                // Rotate by 270 because our prefabs are rotated 
+                Quaternion rotation = Quaternion.Euler(270, 270, 0);
                 // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
                 int pieceNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["Gamepiece"];
-                PhotonNetwork.Instantiate(pieces[pieceNum].name, board.locations[0].gridPoint, Quaternion.identity, 0);
+                PhotonNetwork.Instantiate(pieces[pieceNum].name, board.locations[0].gridPoint, rotation, 0);
             }
 
             if (PhotonNetwork.IsMasterClient) {
@@ -96,15 +98,17 @@ namespace Monopoly
             if (location > 39)
             {
                 location = location - 39;
+                if (location != 0) { // Passed but not landed on GO
+                    ReceiveMoney(200);
+                }
             }
             MoveToLocation(location);
-            
-            LandedOn(steps);
         }
 
         public void MoveToLocation(int location)
         {
             PlayerManager.location = location;
+            PlayerManager.isMoving = true;
         }
 
         public void LandedOn(int? diceRoll = null)
@@ -253,21 +257,7 @@ namespace Monopoly
             DisableButton("buildHouseButton");
             DisableButton("endTurnButton");
 
-            // Check how many players are bankrupt
-            List<Player> notBankrupt = new List<Player>();
-            foreach (Player player in players) {
-                if ((bool)player.CustomProperties["Bankrupt"] == false) {
-                    notBankrupt.Add(player);
-                }
-            }
-
-            if (notBankrupt.Count == 0) {
-                EndGame(null);
-                return;
-            } else if (notBankrupt.Count == 1) { // Only one person left, they are the winner
-                EndGame(notBankrupt[0]);
-                return;
-            }
+            CheckNumBankrupt();
 
             if (currentPlayer == PhotonNetwork.CurrentRoom.PlayerCount-1) {
                 currentPlayer = 0;
@@ -285,6 +275,7 @@ namespace Monopoly
 
         public void StartTurn()
         {
+            CameraController.viewDiceRoll = true;
             if (players[currentPlayer] == PhotonNetwork.LocalPlayer)
             {
                 popUpWindow.SetActive(true);
@@ -292,6 +283,8 @@ namespace Monopoly
                 StartCoroutine(WaitForDiceRoll(diceNum => {
                     EnableButton("endTurnButton");
                     Move(diceNum);
+                    CameraFollow.isFollowing = true; // Move camera to target for current player
+                    LandedOn(diceNum);
                 }));
             }
             else {
@@ -368,6 +361,25 @@ namespace Monopoly
             return false;
         }
 
+        public void CheckNumBankrupt()
+        {
+            // Check how many players are not bankrupt
+            List<Player> notBankrupt = new List<Player>();
+            foreach (Player player in players) {
+                if ((bool)player.CustomProperties["Bankrupt"] == false) {
+                    notBankrupt.Add(player);
+                }
+            }
+
+            if (notBankrupt.Count == 0) {
+                EndGame(null);
+                return;
+            } else if (notBankrupt.Count == 1) { // Only one person left, they are the winner
+                EndGame(notBankrupt[0]);
+                return;
+            }
+        }
+
         public void SoldPropertyNoMoney()
         {
             if (PlayerManager.balance >= PlayerManager.noMoneyAmount) {
@@ -416,7 +428,7 @@ namespace Monopoly
             // Roll dice after player presses space
             dice.RollDice();
             while (dice.currentNum == -1) {
-                yield return new WaitForSeconds(3);
+                yield return new WaitForSeconds(2);
             }
 
             callback(dice.currentNum); // Use callback to do something with result
@@ -444,10 +456,16 @@ namespace Monopoly
 
             if (PhotonNetwork.IsMasterClient) {
                 if (players[currentPlayer] == other) {
+                    players = PhotonNetwork.PlayerList;
                     NextPlayer();
                 }
+                else {
+                    CheckNumBankrupt();
+                }
             }
-            players = PhotonNetwork.PlayerList;
+            else {
+                players = PhotonNetwork.PlayerList;
+            }
         }
 
         public void SendActivityMessage(string content, int? player = null)

@@ -16,10 +16,32 @@ namespace Monopoly
         private float maximumY = 90F;
         float rotationY = -90F;
 
+        private float lerpSpeed = 10.0f;
+
+        public static bool viewDiceRoll = false;
+
         void Update()
         {
-            MouseInput();
-            KeyboardInput();
+            if (viewDiceRoll) {
+                LerpDiceRoll();
+            }
+            else
+            {
+                MouseInput();
+                KeyboardInput();
+            }
+        }
+
+        void LerpDiceRoll()
+        {
+            Vector3 viewDicePos = new Vector3(0, 55, 1);
+            this.transform.position = Vector3.Lerp(this.transform.position, viewDicePos, lerpSpeed*Time.deltaTime);
+            this.transform.LookAt(Vector3.zero); // Camera should be looking straight down
+
+            // Stop following once we reach the position
+            if (this.transform.position == viewDicePos) {
+                viewDiceRoll = false;
+            }
         }
 
         void KeyboardInput()

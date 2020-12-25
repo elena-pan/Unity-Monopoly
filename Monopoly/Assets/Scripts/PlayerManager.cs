@@ -13,6 +13,7 @@ namespace Monopoly
         public static int location;
         public static int balance;
         public static int noMoneyAmount;
+        public static bool isMoving;
         
         public float lerpSpeed = 5f;
 
@@ -33,9 +34,12 @@ namespace Monopoly
         void Update()
         {
             // Continually update location of our piece
-            if (photonView.IsMine && LocalPlayerInstance) {
+            if (photonView.IsMine && LocalPlayerInstance && isMoving) {
                 Vector3 newLocation = GameManager.instance.board.locations[location].gridPoint;
                 LocalPlayerInstance.transform.position = Vector3.Lerp(LocalPlayerInstance.transform.position, newLocation, lerpSpeed*Time.deltaTime);
+                if (Vector3.Distance(LocalPlayerInstance.transform.position, newLocation) < 1.0f) {
+                    isMoving = false;
+                }
             }
         }
 
