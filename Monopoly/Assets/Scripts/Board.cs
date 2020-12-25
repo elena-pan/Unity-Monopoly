@@ -12,17 +12,10 @@ namespace Monopoly
         public List<Location> locations;
         public List<Card> chanceCards;
         public List<Card> communityChestCards;
-        public float lerpSpeed = 30f;
 
         public void RemovePiece(GameObject piece)
         {
             Destroy(piece);
-        }
-
-        public void MovePiece(GameObject piece, int location)
-        {
-            Vector3 newLocation = locations[location].gridPoint;
-            piece.transform.position = Vector3.Lerp(piece.transform.position, newLocation, lerpSpeed*Time.deltaTime);
         }
 
         public void SetUpLocations()

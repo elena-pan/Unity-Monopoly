@@ -72,7 +72,7 @@ namespace Monopoly
 
         void Update()
         {
-            if (HasProperties) 
+            if (HasProperties()) 
             {
                 EnableButton("sellPropertyButton");
             }
@@ -104,7 +104,6 @@ namespace Monopoly
 
         public void MoveToLocation(int location)
         {
-            board.MovePiece(PlayerManager.LocalPlayerInstance, location);
             PlayerManager.location = location;
         }
 
@@ -206,9 +205,14 @@ namespace Monopoly
                         // If receive money
                         if (drawnCard.amountMoney > 0) {
                             ReceiveMoney(drawnCard.amountMoney);
+                            string receivedMessage = "received $" + drawnCard.amountMoney.ToString();
+                            SendActivityMessage(receivedMessage, currentPlayer);
                         } else if (drawnCard.amountMoney < 0) {
                             bool paid2 = PayMoney(Math.Abs(drawnCard.amountMoney));
-                            if (!paid2) return;
+                            if (paid2) {
+                                string paidMessage = "paid $" + Math.Abs(drawnCard.amountMoney).ToString();
+                                SendActivityMessage(paidMessage, currentPlayer);
+                            }
                         }
 
                         if (drawnCard.moveTo != null) {
@@ -224,9 +228,14 @@ namespace Monopoly
                         // If receive money
                         if (drawnCard2.amountMoney > 0) {
                             ReceiveMoney(drawnCard2.amountMoney);
+                            string receivedMessage2 = "received $" + drawnCard2.amountMoney.ToString();
+                            SendActivityMessage(receivedMessage2, currentPlayer);
                         } else if (drawnCard2.amountMoney < 0) {
                             bool paid3 = PayMoney(Math.Abs(drawnCard2.amountMoney));
-                            if (!paid3) return;
+                            if (paid3) {
+                                string paidMessage2 = "paid $" + Math.Abs(drawnCard2.amountMoney).ToString();
+                                SendActivityMessage(paidMessage2, currentPlayer);
+                            }
                         }
 
                         if (drawnCard2.moveTo != null) {
@@ -348,7 +357,7 @@ namespace Monopoly
             }
         }
 
-        public void HasProperties()
+        public bool HasProperties()
         {
             bool[] ownedProperties = (bool[])PhotonNetwork.LocalPlayer.CustomProperties["OwnedProperties"];
             for (int i = 0; i < 40; i++) {
@@ -430,9 +439,15 @@ namespace Monopoly
 
         public override void OnPlayerLeftRoom(Player other)
         {
-            players = PhotonNetwork.PlayerList;
             string text = other.NickName + " has left the game.";
             PlayerUi.SendMessage ("AddActivityText", text, SendMessageOptions.RequireReceiver);
+
+            if (PhotonNetwork.IsMasterClient) {
+                if (players[currentPlayer] == other) {
+                    NextPlayer();
+                }
+            }
+            players = PhotonNetwork.PlayerList;
         }
 
         public void SendActivityMessage(string content, int? player = null)

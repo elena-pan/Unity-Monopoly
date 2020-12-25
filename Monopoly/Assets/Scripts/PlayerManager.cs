@@ -13,6 +13,8 @@ namespace Monopoly
         public static int location;
         public static int balance;
         public static int noMoneyAmount;
+        
+        public float lerpSpeed = 5f;
 
         void Awake()
         {
@@ -26,6 +28,15 @@ namespace Monopoly
             }
             // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
             DontDestroyOnLoad(this.gameObject);
+        }
+
+        void Update()
+        {
+            // Continually update location of our piece
+            if (photonView.IsMine && LocalPlayerInstance) {
+                Vector3 newLocation = GameManager.instance.board.locations[location].gridPoint;
+                LocalPlayerInstance.transform.position = Vector3.Lerp(LocalPlayerInstance.transform.position, newLocation, lerpSpeed*Time.deltaTime);
+            }
         }
 
         /*
