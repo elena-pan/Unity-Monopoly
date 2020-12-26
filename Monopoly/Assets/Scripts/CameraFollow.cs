@@ -15,7 +15,7 @@ namespace Monopoly
 
         [Tooltip("The Smoothing for the camera to follow the target")]
         [SerializeField]
-        private float lerpSpeed = 5f;
+        private float lerpSpeed = 2f;
 
         // cached transform of the target
         Transform cameraTransform;
@@ -39,6 +39,7 @@ namespace Monopoly
         /// Follow the target smoothly
         void Follow()
         {
+            CameraController.viewDiceRoll = false; // Prevents both happening at once
             cameraOffset.z = -distance;
             cameraOffset.y = height;
 

@@ -25,7 +25,7 @@ namespace Monopoly
             this.locations.Add(new Property("Mediterreanean Avenue", 60, 50, 2, new Vector3(-19.0f, 0f, 25.0f)));
             this.locations.Add(new Location("Community Chest", new Vector3(-15.0f, 0f, 25.0f)));
             this.locations.Add(new Property("Baltic Avenue", 60, 50, 4, new Vector3(-11.0f, 0f, 25.0f)));
-            this.locations.Add(new Tax("Income Tax", 200, new Vector3(6.0f, 0f, 25.0f)));
+            this.locations.Add(new Tax("Income Tax", 200, new Vector3(-6.0f, 0f, 25.0f)));
             this.locations.Add(new Railroad("Reading Railroad", new Vector3(-2.0f, 0f, 25.0f)));
             this.locations.Add(new Property("Oriental Avenue", 100, 50, 6, new Vector3(3.0f, 0f, 25.0f)));
             this.locations.Add(new Location("Chance", new Vector3(7.0f, 0f, -10.0f)));

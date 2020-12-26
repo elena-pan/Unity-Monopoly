@@ -1820,8 +1820,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20, y: 80}
-  m_SizeDelta: {x: 1000, y: 80}
+  m_AnchoredPosition: {x: 520, y: 100}
+  m_SizeDelta: {x: 2000, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &151943600
 MonoBehaviour:
@@ -3811,8 +3811,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20, y: 120}
-  m_SizeDelta: {x: 1000, y: 80}
+  m_AnchoredPosition: {x: 520, y: 140}
+  m_SizeDelta: {x: 2000, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &556637945
 MonoBehaviour:
@@ -4861,7 +4861,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dca7f58eaf1aa146980e8fb3aac67ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentNum: 0
 --- !u!114 &697344517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7381,8 +7380,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20, y: 40}
-  m_SizeDelta: {x: 1000, y: 80}
+  m_AnchoredPosition: {x: 520, y: 60}
+  m_SizeDelta: {x: 2000, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1213536662
 MonoBehaviour:
@@ -9341,8 +9340,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20, y: 0}
-  m_SizeDelta: {x: 1000, y: 80}
+  m_AnchoredPosition: {x: 520, y: 20}
+  m_SizeDelta: {x: 2000, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1544286059
 MonoBehaviour:
@@ -10813,7 +10812,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a00aef0644e19a4799628aee240b424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diceNum: 0
 --- !u!1 &1743251890
 GameObject:
   m_ObjectHideFlags: 0

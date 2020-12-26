@@ -9,7 +9,7 @@ namespace Monopoly
         public static int diceNum;
         void OnTriggerStay(Collider col)
         {
-            if (col.attachedRigidbody.velocity.magnitude == 0) {
+            if (col.attachedRigidbody.velocity.magnitude < 1.0f) {
                 switch (col.gameObject.name) {
                     case "Side 1":
                         diceNum = 6;

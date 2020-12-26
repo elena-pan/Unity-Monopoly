@@ -17,6 +17,7 @@ namespace Monopoly
         public const byte PlayerTurnCode = 2;
         public const byte ReceiveMoneyCode = 3;
         public const byte PropertyChangeCode = 4;
+        public const byte EndGameCode = 7;
     
         public Dice dice;
         public Board board;
@@ -284,6 +285,7 @@ namespace Monopoly
                     EnableButton("endTurnButton");
                     Move(diceNum);
                     CameraFollow.isFollowing = true; // Move camera to target for current player
+                    Bankrupt();
                     LandedOn(diceNum);
                 }));
             }
@@ -402,12 +404,21 @@ namespace Monopoly
             ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
             hash.Add("Bankrupt", true);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
             SendActivityMessage("went bankrupt!", currentPlayer);
             NextPlayer();
         }
 
         public void EndGame(Player winner)
         {
+            int playerNum = 0;
+            for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++) {
+                if (players[i] == winner) {
+                    playerNum = i;
+                }
+            }
+            SendEvent(EndGameCode, playerNum);
+            
             if (winner == null) {
                 WinnerScene.winner = "Game over - no winners";
             }
@@ -551,6 +562,9 @@ namespace Monopoly
                         board.locations[location]= temp;
                     }
                     break;
+                case EndGameCode:
+                    int? data = (int?)photonEvent.CustomData;
+                    EndGame(data);
             }
         }
 
@@ -586,7 +600,7 @@ namespace Monopoly
             DisableButton("buyPropertyButton");
         }
 
-        public void buildHouse()
+        public void BuildHouse()
         {
             Property property = (Property)board.locations[PlayerManager.location];
             PlayerManager.balance -= property.housePrice; // Subtract price from balance
@@ -604,8 +618,8 @@ namespace Monopoly
 
         public void SellProperty(int property)
         {
-            if (board.locations[PlayerManager.location] is Property) {
-                Property boughtProperty = (Property)board.locations[PlayerManager.location];
+            if (board.locations[property] is Property) {
+                Property boughtProperty = (Property)board.locations[property];
                 // Sells for half price - plus houses at half price
                 PlayerManager.balance += (int)(0.5*boughtProperty.price);
                 PlayerManager.balance += (int)(0.5*boughtProperty.housePrice*boughtProperty.numHouses);
@@ -615,12 +629,12 @@ namespace Monopoly
                 object[] data = new object[] {PlayerManager.location, "reset"};
                 SendEvent(PropertyChangeCode, data);
             }
-            else if (board.locations[PlayerManager.location] is Utility) {
-                Utility boughtProperty = (Utility)board.locations[PlayerManager.location];
+            else if (board.locations[property] is Utility) {
+                Utility boughtProperty = (Utility)board.locations[property];
                 PlayerManager.balance += (int)(0.5*boughtProperty.price);
             }
             else { //Railroad
-                Railroad boughtProperty = (Railroad)board.locations[PlayerManager.location];
+                Railroad boughtProperty = (Railroad)board.locations[property];
                 PlayerManager.balance += (int)(0.5*boughtProperty.price);
             }
 

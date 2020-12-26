@@ -34,6 +34,7 @@ namespace Monopoly
 
         void LerpDiceRoll()
         {
+            CameraFollow.isFollowing = false; // Prevents both happening at once
             Vector3 viewDicePos = new Vector3(0, 55, 1);
             this.transform.position = Vector3.Lerp(this.transform.position, viewDicePos, lerpSpeed*Time.deltaTime);
             this.transform.LookAt(Vector3.zero); // Camera should be looking straight down
