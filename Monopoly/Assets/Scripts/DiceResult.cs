@@ -6,7 +6,7 @@ namespace Monopoly
 {
     public class DiceResult : MonoBehaviour
     {
-        public int diceNum;
+        public static int diceNum;
         void OnTriggerStay(Collider col)
         {
             if (col.attachedRigidbody.velocity.magnitude == 0) {

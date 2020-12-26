@@ -427,11 +427,11 @@ namespace Monopoly
         
             // Roll dice after player presses space
             dice.RollDice();
-            while (dice.currentNum == -1) {
+            while (DiceResult.diceNum == -1) {
                 yield return new WaitForSeconds(2);
             }
 
-            callback(dice.currentNum); // Use callback to do something with result
+            callback(DiceResult.diceNum); // Use callback to do something with result
         }
         
         private IEnumerator WaitForKeyPress(KeyCode key)
