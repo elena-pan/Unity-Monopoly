@@ -12,12 +12,7 @@ namespace Monopoly
         private Dropdown propertyDropdown;
 
         private List<int> ownedProperties;
-        private int currentDropdown;
-
-        void Update()
-        {
-            UpdateDropdownOptions();
-        }
+        private int currentDropdown = 0;
 
         public void SellPropertyClicked()
         {
@@ -65,6 +60,7 @@ namespace Monopoly
             propertyDropdown.AddOptions(options);
             propertyDropdown.value = 0;
             propertyDropdown.RefreshShownValue();
+            currentDropdown = 0;
         }
         public void OnClickDropdownOption(Dropdown dropdown) {
             currentDropdown = dropdown.value;

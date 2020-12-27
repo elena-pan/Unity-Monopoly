@@ -8,6 +8,11 @@ namespace Monopoly
     {
         public string name;
         public Vector3 gridPoint;
+
+        // Put these here for now for convenience
+        public Vector3[] houseLocations;
+        public Quaternion houseRotation;
+
         public Location(string name, Vector3 gridPoint)
         {
             this.name = name;
@@ -22,6 +27,9 @@ namespace Monopoly
         public int rent;
         public int numHouses;
         public Player owner;
+
+        public House[] houses; // Store gameobjects of houses so we can destroy them if this property is sold
+        
         public Property(string name, int price, int housePrice, int rent, Vector3 gridPoint) : base(name, gridPoint)
         {
             this.price = price;
@@ -29,6 +37,7 @@ namespace Monopoly
             this.rent = rent;
             this.numHouses = 0;
             this.owner = null;
+            this.houses = new House[] {null, null, null, null};
         }
 
         public void BuildHouse()
@@ -77,6 +86,16 @@ namespace Monopoly
 
         public void Reset()
         {
+            // Destroy house gameobjects
+            if (numHouses == 5) {
+                this.houses[0].DestroyHouse();
+            }
+            else {
+                for (int i = 0; i < this.numHouses; i++) {
+                    this.houses[i].DestroyHouse();
+                }
+            }
+
             this.owner = null;
             switch (this.numHouses) {
             case 0:

@@ -34,12 +34,14 @@ namespace Monopoly
         public GameObject wheelbarrow;
         public GameObject[] pieces;
 
-        public GameObject house;
-        public GameObject hotel;
+        public House house;
+        public House hotel;
 
         public GameObject PlayerUi;
         public GameObject popUpWindow;
         public GameObject noMoneyOptions;
+
+        private bool isRent = false; // Make sure other player receives rent when we exit the NoMoney loop
         
         void Awake()
         {
@@ -82,6 +84,7 @@ namespace Monopoly
             else {
                 DisableButton("sellPropertyButton");
             }
+            //EnableButton("buildHouseButton");
         }
 
         private void SetupBoard()
@@ -131,8 +134,11 @@ namespace Monopoly
                             string text = "paid $" + currentLocation.rent + " in rent to " + currentLocation.owner.NickName;
                             SendActivityMessage(text, currentPlayer);
                         }
+                        else {
+                            isRent = true;
+                        }
                     } else { // By self
-                        if (PlayerManager.balance >= currentLocation.price) {
+                        if (PlayerManager.balance >= currentLocation.housePrice) {
                             if (currentLocation.numHouses < 5) {
                                 EnableButton("buildHouseButton");
                             }
@@ -154,6 +160,9 @@ namespace Monopoly
                             string text = "paid $" + rent + " in rent to " + currentLocation.owner.NickName;
                             SendActivityMessage(text, currentPlayer);
                         }
+                        else {
+                            isRent = true;
+                        }
                     }
                 }
             }
@@ -170,6 +179,9 @@ namespace Monopoly
                         if (paid) {
                             string text = "paid $" + rent + " in rent to " + currentLocation.owner.NickName;
                             SendActivityMessage(text, currentPlayer);
+                        }
+                        else {
+                            isRent = true;
                         }
                     }
                 }
@@ -259,6 +271,7 @@ namespace Monopoly
             DisableButton("endTurnButton");
 
             CheckNumBankrupt();
+            isRent = false;
 
             if (currentPlayer == PhotonNetwork.CurrentRoom.PlayerCount-1) {
                 currentPlayer = 0;
@@ -285,7 +298,6 @@ namespace Monopoly
                     EnableButton("endTurnButton");
                     Move(diceNum);
                     CameraFollow.isFollowing = true; // Move camera to target for current player
-                    Bankrupt();
                     LandedOn(diceNum);
                 }));
             }
@@ -385,13 +397,25 @@ namespace Monopoly
         public void SoldPropertyNoMoney()
         {
             if (PlayerManager.balance >= PlayerManager.noMoneyAmount) {
-                string paidMessage = "paid $" + PlayerManager.noMoneyAmount.ToString();
-                SendActivityMessage(paidMessage, currentPlayer);
-                PlayerManager.balance -= PlayerManager.noMoneyAmount;
+                noMoneyOptions.SetActive(false);
+
+                if (isRent) { // Make sure the other player also receives their rent
+                    string paidMessage = "paid $" + PlayerManager.noMoneyAmount.ToString() + " in rent to " + currentLocation.owner.NickName;
+                    SendActivityMessage(paidMessage, currentPlayer);
+                    PayMoney(PlayerManager.noMoneyAmount, currentLocation.owner);
+                    isRent = false;
+                }
+                else {
+                    string paidMessage = "paid $" + PlayerManager.noMoneyAmount.ToString();
+                    SendActivityMessage(paidMessage, currentPlayer);
+                    PayMoney(PlayerManager.noMoneyAmount);
+                }
+                
                 PlayerManager.noMoneyAmount = 0;
                 
                 EnableButton("sellPropertyButton");
                 EnableButton("endTurnButton");
+
             }
             else {
                 NoMoney(PlayerManager.noMoneyAmount);
@@ -403,22 +427,73 @@ namespace Monopoly
             // Set custom player property as bankrupt
             ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
             hash.Add("Bankrupt", true);
+            hash.Add("OwnedProperties", new bool[40]);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
             SendActivityMessage("went bankrupt!", currentPlayer);
+
+            // Check how many players are not bankrupt
+            // We do this here because the custom properties are not set fast enough
+            List<Player> notBankrupt = new List<Player>();
+            foreach (Player player in players) {
+                if (player == PhotonNetwork.LocalPlayer) {
+                    continue;
+                }
+                if ((bool)player.CustomProperties["Bankrupt"] == false) {
+                    notBankrupt.Add(player);
+                }
+            }
+
+            if (notBankrupt.Count == 0) {
+                EndGame(null);
+                return;
+            } else if (notBankrupt.Count == 1) { // Only one person left, they are the winner
+                EndGame(notBankrupt[0]);
+                return;
+            }
+
+            // Reset all owned properties
+            for (int i = 0; i < 40; i++) {
+                if (board.locations[i] is Property) {
+                    Property property = (Property)board.locations[i];
+                    if (property.owner == PhotonNetwork.LocalPlayer) {
+                        object[] data = {i, "reset"};
+                        SendEvent(PropertyChangeCode, data);
+                    }
+                }
+                else if (board.locations[i] is Utility) {
+                    Utility property = (Utility)board.locations[i];
+                    if (property.owner == PhotonNetwork.LocalPlayer) {
+                        object[] data = {i, "owner", null};
+                        SendEvent(PropertyChangeCode, data);
+                    }
+                }
+                else {
+                    Railroad property = (Railroad)board.locations[i];
+                    if (property.owner == PhotonNetwork.LocalPlayer) {
+                        object[] data = {i, "owner", null};
+                        SendEvent(PropertyChangeCode, data);
+                    }
+                }
+            }
+
             NextPlayer();
         }
 
-        public void EndGame(Player winner)
+        public void EndGame(Player winner, bool receivedSignal = false)
         {
-            int playerNum = 0;
-            for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++) {
-                if (players[i] == winner) {
-                    playerNum = i;
+            // We are sending the bankrupt signal
+            // If we received the signal we don't want to send another signal out to everybody
+            if (receivedSignal == false) {
+                int playerNum = 0;
+                for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++) {
+                    if (players[i] == winner) {
+                        playerNum = i;
+                    }
                 }
+                SendEvent(EndGameCode, playerNum);
             }
-            SendEvent(EndGameCode, playerNum);
-            
+
             if (winner == null) {
                 WinnerScene.winner = "Game over - no winners";
             }
@@ -435,6 +510,7 @@ namespace Monopoly
         
             // wait for player to press space
             yield return WaitForKeyPress(KeyCode.Space); // wait for this function to return
+            popUpWindow.SetActive(false);
         
             // Roll dice after player presses space
             dice.RollDice();
@@ -464,6 +540,29 @@ namespace Monopoly
         {
             string text = other.NickName + " has left the game.";
             PlayerUi.SendMessage ("AddActivityText", text, SendMessageOptions.RequireReceiver);
+
+            // Reset all owned properties of the player
+            // We do this locally for every player so we don't need to use the network
+            for (int i = 0; i < 40; i++) {
+                if (board.locations[i] is Property) {
+                    Property property = (Property)board.locations[i];
+                    if (property.owner == other) {
+                        property.Reset();
+                    }
+                }
+                else if (board.locations[i] is Utility) {
+                    Utility property = (Utility)board.locations[i];
+                    if (property.owner == other) {
+                        property.owner = null;
+                    }
+                }
+                else if (board.locations[i] is Railroad) {
+                    Railroad property = (Railroad)board.locations[i];
+                    if (property.owner == other) {
+                        property.owner = null;
+                    }
+                }
+            }
 
             if (PhotonNetwork.IsMasterClient) {
                 if (players[currentPlayer] == other) {
@@ -563,8 +662,14 @@ namespace Monopoly
                     }
                     break;
                 case EndGameCode:
-                    int? data = (int?)photonEvent.CustomData;
-                    EndGame(data);
+                    int? playerNum = (int?)photonEvent.CustomData;
+                    if (playerNum == null) {
+                        EndGame(null);
+                    }
+                    else {
+                        EndGame(players[(int)playerNum], true);
+                    }
+                    break;
             }
         }
 
@@ -614,6 +719,27 @@ namespace Monopoly
             string text = "built a house on " + property.name;
             SendActivityMessage(text, currentPlayer);
             DisableButton("buildHouseButton");
+
+            // Instantiate a house gameobject - destroy old houses and make hotel if numHouses = 5
+            if (numHouses == 5) {
+                for (int i = 0; i < 4; i++) {
+                    property.houses[i].DestroyHouse();
+                    property.houses[i] = null;
+                }
+                // Instantiate 10 units above ground so it falls
+                Vector3 location = property.houseLocations[0];
+                location.y = 10f;
+                // Store in first since hotel will be only gameobject
+                property.houses[0] = PhotonNetwork.Instantiate(hotel.name, location, property.houseRotation, 0).GetComponent<House>();
+            }
+            else {
+                // Instantiate 5 units above ground so it falls
+                Vector3 location = property.houseLocations[numHouses-1];
+                location.y = 5f;
+                property.houses[numHouses-1] = PhotonNetwork.Instantiate(house.name, location, property.houseRotation, 0).GetComponent<House>();
+            }
+
+            board.locations[PlayerManager.location] = property;
         }
 
         public void SellProperty(int property)
@@ -626,7 +752,7 @@ namespace Monopoly
 
                 // Send message to reset property
                 // This will change the property on our local player since the message is also sent to us
-                object[] data = new object[] {PlayerManager.location, "reset"};
+                object[] data = new object[] {property, "reset"};
                 SendEvent(PropertyChangeCode, data);
             }
             else if (board.locations[property] is Utility) {
@@ -640,17 +766,17 @@ namespace Monopoly
 
             // Change our ownedProperties CustomProperty
             bool[] ownedProperties = (bool[])PhotonNetwork.LocalPlayer.CustomProperties["OwnedProperties"];
-            ownedProperties[PlayerManager.location] = false;
+            ownedProperties[property] = false;
             ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
             hash.Add("OwnedProperties", ownedProperties);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
             // This will change the property on our local player since the message is also sent to us
-            object[] data2 = new object[] {PlayerManager.location, "owner", null};
+            object[] data2 = new object[] {property, "owner", null};
             SendEvent(PropertyChangeCode, data2);
             
             // Send activity message as well
-            string text = "sold " + board.locations[PlayerManager.location].name;
+            string text = "sold " + board.locations[property].name;
             int localPlayer = 0;
             for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++) {
                 if (players[i] == PhotonNetwork.LocalPlayer) {

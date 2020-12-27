@@ -16,6 +16,7 @@ namespace Monopoly
         public static bool isMoving;
         
         public float lerpSpeed = 5f;
+        public float slerpSpeed = 10f;
 
         void Awake()
         {
@@ -23,7 +24,7 @@ namespace Monopoly
             if (photonView.IsMine)
             {
                 PlayerManager.LocalPlayerInstance = this.gameObject;
-                PlayerManager.balance = 0;
+                PlayerManager.balance = 1500;
                 PlayerManager.location = 0;
                 PlayerManager.noMoneyAmount = 0;
             }
@@ -37,6 +38,11 @@ namespace Monopoly
             if (photonView.IsMine && LocalPlayerInstance && isMoving) {
                 Vector3 newLocation = GameManager.instance.board.locations[location].gridPoint;
                 LocalPlayerInstance.transform.position = Vector3.Lerp(LocalPlayerInstance.transform.position, newLocation, lerpSpeed*Time.deltaTime);
+
+                // Also rotate back to upright
+                Quaternion upright = Quaternion.Euler(270, 270, 0);
+                LocalPlayerInstance.transform.rotation = Quaternion.Slerp(LocalPlayerInstance.transform.rotation, upright, slerpSpeed*Time.deltaTime);
+
                 if (Vector3.Distance(LocalPlayerInstance.transform.position, newLocation) < 1.0f) {
                     isMoving = false;
                 }

@@ -18,6 +18,7 @@ namespace Monopoly
             Destroy(piece);
         }
 
+        // Refactor this to make it easier to read
         public void SetUpLocations()
         {
             this.locations = new List<Location>();
@@ -28,7 +29,7 @@ namespace Monopoly
             this.locations.Add(new Tax("Income Tax", 200, new Vector3(-6.0f, 0f, 25.0f)));
             this.locations.Add(new Railroad("Reading Railroad", new Vector3(-2.0f, 0f, 25.0f)));
             this.locations.Add(new Property("Oriental Avenue", 100, 50, 6, new Vector3(3.0f, 0f, 25.0f)));
-            this.locations.Add(new Location("Chance", new Vector3(7.0f, 0f, -10.0f)));
+            this.locations.Add(new Location("Chance", new Vector3(7.0f, 0f, 25.0f)));
             this.locations.Add(new Property("Vermont Avenue", 100, 50, 6, new Vector3(12.0f, 0f, 25.0f)));
             this.locations.Add(new Property("Connecticut Avenue", 120, 50, 8, new Vector3(16.0f, 0f, 25.0f)));
             this.locations.Add(new Location("Jail", new Vector3(23.0f, 0f, 25.0f)));
@@ -61,6 +62,80 @@ namespace Monopoly
             this.locations.Add(new Property("Park Place", 350, 200, 35, new Vector3(-25.0f, 0f, 10.0f)));
             this.locations.Add(new Tax("Luxury Tax", 100, new Vector3(-25.0f, 0f, 14.0f)));
             this.locations.Add(new Property("Boardwalk", 400, 200, 50, new Vector3(-25.0f, 0f, 19.0f)));
+
+            SetUpHouseLocations();
+        }
+
+        public void SetUpHouseLocations()
+        {
+            // Last house is location for hotel - 
+            // will be the same as the location for the first house so we don't store it again
+            // Houses are spaced 1 unit apart
+            locations[1].houseLocations = new Vector3[] {new Vector3(-16f, 0f, 21.5f), new Vector3(-17f, 0f, 21.5f), new Vector3(-18f, 0f, 21.5f), new Vector3(-19f, 0f, 21.5f)};
+            locations[1].houseRotation = Quaternion.Euler(270, 0, 0);
+
+            locations[3].houseLocations = new Vector3[] {new Vector3(-7f, 0f, 21.5f), new Vector3(-8f, 0f, 21.5f), new Vector3(-9f, 0f, 21.5f), new Vector3(-10f, 0f, 21.5f)};
+            locations[3].houseRotation = Quaternion.Euler(270, 0, 0);
+
+            locations[6].houseLocations = new Vector3[] {new Vector3(6.5f, 0f, 21.5f), new Vector3(5.5f, 0f, 21.5f), new Vector3(4.5f, 0f, 21.5f), new Vector3(3.5f, 0f, 21.5f)};
+            locations[6].houseRotation = Quaternion.Euler(270, 0, 0);
+
+            locations[8].houseLocations = new Vector3[] {new Vector3(15.5f, 0f, 21.5f), new Vector3(14.5f, 0f, 21.5f), new Vector3(13.5f, 0f, 21.5f), new Vector3(12.5f, 0f, 21.5f)};
+            locations[8].houseRotation = Quaternion.Euler(270, 0, 0);
+
+            locations[9].houseLocations = new Vector3[] {new Vector3(20f, 0f, 21.5f), new Vector3(19f, 0f, 21.5f), new Vector3(18f, 0f, 21.5f), new Vector3(17f, 0f, 21.5f)};
+            locations[9].houseRotation = Quaternion.Euler(270, 0, 0);
+
+            locations[11].houseLocations = new Vector3[] {new Vector3(21.5f, 0f, 16f), new Vector3(21.5f, 0f, 17f), new Vector3(21.5f, 0f, 18f), new Vector3(21.5f, 0f, 19f)};
+            locations[11].houseRotation = Quaternion.Euler(270, 0, 90);
+
+            locations[13].houseLocations = new Vector3[] {new Vector3(21.5f, 0f, 7f), new Vector3(21.5f, 0f, 8f), new Vector3(21.5f, 0f, 9f), new Vector3(21.5f, 0f, 10f)};
+            locations[13].houseRotation = Quaternion.Euler(270, 0, 90);
+
+            locations[14].houseLocations = new Vector3[] {new Vector3(21.5f, 0f, 2.5f), new Vector3(21.5f, 0f, 3.5f), new Vector3(21.5f, 0f, 4.5f), new Vector3(21.5f, 0f, 5.5f)};
+            locations[14].houseRotation = Quaternion.Euler(270, 0, 90);
+
+            locations[16].houseLocations = new Vector3[] {new Vector3(21.5f, 0f, -6.5f), new Vector3(21.5f, 0f, -5.5f), new Vector3(21.5f, 0f, -4.5f), new Vector3(21.5f, 0f, -3.5f)};
+            locations[16].houseRotation = Quaternion.Euler(270, 0, 90);
+
+            locations[18].houseLocations = new Vector3[] {new Vector3(21.5f, 0f, -15.5f), new Vector3(21.5f, 0f, -14.5f), new Vector3(21.5f, 0f, -13.5f), new Vector3(21.5f, 0f, -12.5f)};
+            locations[18].houseRotation = Quaternion.Euler(270, 0, 90);
+
+            locations[19].houseLocations = new Vector3[] {new Vector3(21.5f, 0f, -20f), new Vector3(21.5f, 0f, -19f), new Vector3(21.5f, 0f, -18f), new Vector3(21.5f, 0f, -17f)};
+            locations[19].houseRotation = Quaternion.Euler(270, 0, 90);
+
+            locations[21].houseLocations = new Vector3[] {new Vector3(16f, 0f, -21.5f), new Vector3(17f, 0f, -21.5f), new Vector3(18f, 0f, -21.5f), new Vector3(19f, 0f, -21.5f)};
+            locations[21].houseRotation = Quaternion.Euler(270, 0, 180);
+
+            locations[23].houseLocations = new Vector3[] {new Vector3(7f, 0f, -21.5f), new Vector3(8f, 0f, -21.5f), new Vector3(9f, 0f, -21.5f), new Vector3(10f, 0f, -21.5f)};
+            locations[23].houseRotation = Quaternion.Euler(270, 0, 180);
+
+            locations[24].houseLocations = new Vector3[] {new Vector3(2.5f, 0f, -21.5f), new Vector3(3.5f, 0f, -21.5f), new Vector3(4.5f, 0f, -21.5f), new Vector3(5.5f, 0f, -21.5f)};
+            locations[24].houseRotation = Quaternion.Euler(270, 0, 180);
+
+            locations[26].houseLocations = new Vector3[] {new Vector3(-6.5f, 0f, -21.5f), new Vector3(-5.5f, 0f, -21.5f), new Vector3(-4.5f, 0f, -21.5f), new Vector3(-3.5f, 0f, -21.5f)};
+            locations[26].houseRotation = Quaternion.Euler(270, 0, 180);
+
+            locations[27].houseLocations = new Vector3[] {new Vector3(-11f, 0f, -21.5f), new Vector3(-10f, 0f, -21.5f), new Vector3(-9f, 0f, -21.5f), new Vector3(-8f, 0f, -21.5f)};
+            locations[27].houseRotation = Quaternion.Euler(270, 0, 180);
+
+            locations[29].houseLocations = new Vector3[] {new Vector3(-20f, 0f, -21.5f), new Vector3(-19f, 0f, -21.5f), new Vector3(-18f, 0f, -21.5f), new Vector3(-17f, 0f, -21.5f)};
+            locations[29].houseRotation = Quaternion.Euler(270, 0, 180);
+
+            locations[31].houseLocations = new Vector3[] {new Vector3(-21.5f, 0f, -16f), new Vector3(-21.5f, 0f, -17f), new Vector3(-21.5f, 0f, -18f), new Vector3(-21.5f, 0f, -19f)};
+            locations[31].houseRotation = Quaternion.Euler(270, 0, 270);
+
+            locations[32].houseLocations = new Vector3[] {new Vector3(-21.5f, 0f, -11.5f), new Vector3(-21.5f, 0f, -12.5f), new Vector3(-21.5f, 0f, -13.5f), new Vector3(-21.5f, 0f, -14.5f)};
+            locations[32].houseRotation = Quaternion.Euler(270, 0, 270);
+
+            locations[34].houseLocations = new Vector3[] {new Vector3(-21.5f, 0f, -2.5f), new Vector3(-21.5f, 0f, -3.5f), new Vector3(-21.5f, 0f, -4.5f), new Vector3(-21.5f, 0f, -5.5f)};
+            locations[34].houseRotation = Quaternion.Euler(270, 0, 270);
+
+            locations[37].houseLocations = new Vector3[] {new Vector3(-21.5f, 0f, 11f), new Vector3(-21.5f, 0f, 10f), new Vector3(-21.5f, 0f, 9f), new Vector3(-21.5f, 0f, 8f)};
+            locations[37].houseRotation = Quaternion.Euler(270, 0, 270);
+
+            locations[39].houseLocations = new Vector3[] {new Vector3(-21.5f, 0f, 20f), new Vector3(-21.5f, 0f, 19f), new Vector3(-21.5f, 0f, 18f), new Vector3(-21.5f, 0f, 17f)};
+            locations[39].houseRotation = Quaternion.Euler(270, 0, 270);
         }
 
         public void SetUpCards()
@@ -70,7 +145,7 @@ namespace Monopoly
             this.chanceCards.Add(new Card("Advance to Boardwalk", 0, 39));
             this.chanceCards.Add(new Card("Your building loan matures. Collect $150.", 150, null));
             this.chanceCards.Add(new Card("Advance to GO.", 0, 0));
-            this.chanceCards.Add(new Card("Bank pays you dividend of $50.", 50, 0));
+            this.chanceCards.Add(new Card("Bank pays you dividend of $50.", 50, null));
             this.chanceCards.Add(new Card("General repairs - pay $100", -100, null));
             this.chanceCards.Add(new Card("Advance to St. Charles Place.", 0, 11));
             this.chanceCards.Add(new Card("Advance to Illinois Avenue.", 0, 24));
@@ -88,12 +163,12 @@ namespace Monopoly
             this.communityChestCards.Add(new Card("Holiday fund matures. Receive $100.", 100, null));
             this.communityChestCards.Add(new Card("You have won second prize in a beauty contest. Collect $10.", 10, null));
             this.communityChestCards.Add(new Card("Receive $25 consultancy fee.", 25, null));
-            this.communityChestCards.Add(new Card("Bank error in your favour. Collect $200.", 200, 0));
+            this.communityChestCards.Add(new Card("Bank error in your favour. Collect $200.", 200, null));
             this.communityChestCards.Add(new Card("GO TO JAIL, pay $50.", -50, 10));
-            this.communityChestCards.Add(new Card("Life insurance matures. Collect $100.", 100, 0));
-            this.communityChestCards.Add(new Card("Doctor's fees. Pay $50.", -50, 0));
+            this.communityChestCards.Add(new Card("Life insurance matures. Collect $100.", 100, null));
+            this.communityChestCards.Add(new Card("Doctor's fees. Pay $50.", -50, null));
             this.communityChestCards.Add(new Card("Advance to GO.", 0, 0));
-            this.communityChestCards.Add(new Card("Pay school fees of $50.", -50, 0));
+            this.communityChestCards.Add(new Card("Pay school fees of $50.", -50, null));
 
             // Randomize order of cards by assigning each item to random number and 
             // resorting them in ascending order of this assigned number

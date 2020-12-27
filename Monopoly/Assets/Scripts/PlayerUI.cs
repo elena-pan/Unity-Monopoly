@@ -37,7 +37,9 @@ namespace Monopoly
         {
             // Update player stats
             if (statsBody != null) {
-                string temp = "Balance: " + PlayerManager.balance.ToString() + "\nGamepiece: " + PhotonNetwork.LocalPlayer.NickName;
+                // Remove string "(clone)" from gamepiece name
+                string gamePieceName = PlayerManager.LocalPlayerInstance.name.Remove(PlayerManager.LocalPlayerInstance.name.Length - 7);
+                string temp = "Balance: " + PlayerManager.balance.ToString() + "\nGamepiece: " + gamePieceName;
                 if ((bool)PhotonNetwork.LocalPlayer.CustomProperties["Bankrupt"] == false) {
                     temp = temp + "\nBankrupt: " + "No";
                 } else {

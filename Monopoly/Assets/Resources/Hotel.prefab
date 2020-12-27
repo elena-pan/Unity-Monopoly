@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2128662441351178663}
   - component: {fileID: -1707808291325754883}
   - component: {fileID: -3091249410094352563}
+  - component: {fileID: 7702458141302001328}
   m_Layer: 0
   m_Name: Hotel
   m_TagString: Untagged
@@ -151,3 +152,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.19051, y: 0.12567797, z: 0.16077}
   m_Center: {x: -0.095255, y: 0.06283899, z: 0.080385}
+--- !u!114 &7702458141302001328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5297638446028805425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a48d1a648bf7e74baa4cf4c36226282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
