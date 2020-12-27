@@ -15,6 +15,7 @@ namespace Monopoly
         void Start()
         {
             winnerText.text = winner;
+            PhotonNetwork.LeaveRoom();
         }
 
         public void NavigateToStart()

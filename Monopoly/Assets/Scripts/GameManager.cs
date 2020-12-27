@@ -273,7 +273,7 @@ namespace Monopoly
             CheckNumBankrupt();
             isRent = false;
 
-            if (currentPlayer == PhotonNetwork.CurrentRoom.PlayerCount-1) {
+            if (currentPlayer >= PhotonNetwork.CurrentRoom.PlayerCount-1) {
                 currentPlayer = 0;
             } else {
                 currentPlayer++;
@@ -400,6 +400,7 @@ namespace Monopoly
                 noMoneyOptions.SetActive(false);
 
                 if (isRent) { // Make sure the other player also receives their rent
+                    Property currentLocation = (Property)board.locations[PlayerManager.location];
                     string paidMessage = "paid $" + PlayerManager.noMoneyAmount.ToString() + " in rent to " + currentLocation.owner.NickName;
                     SendActivityMessage(paidMessage, currentPlayer);
                     PayMoney(PlayerManager.noMoneyAmount, currentLocation.owner);
@@ -410,7 +411,7 @@ namespace Monopoly
                     SendActivityMessage(paidMessage, currentPlayer);
                     PayMoney(PlayerManager.noMoneyAmount);
                 }
-                
+
                 PlayerManager.noMoneyAmount = 0;
                 
                 EnableButton("sellPropertyButton");
@@ -502,7 +503,6 @@ namespace Monopoly
             } else {
                 WinnerScene.winner = winner.NickName + " is the winner!";
             }
-            PhotonNetwork.LeaveRoom();
             SceneManager.LoadScene(2);
         }
         
@@ -570,6 +570,7 @@ namespace Monopoly
                     NextPlayer();
                 }
                 else {
+                    players = PhotonNetwork.PlayerList;
                     CheckNumBankrupt();
                 }
             }

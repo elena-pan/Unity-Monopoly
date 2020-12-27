@@ -113,6 +113,9 @@ namespace Monopoly
                 PhotonNetwork.ConnectUsingSettings();
                 PhotonNetwork.GameVersion = gameVersion;
             }
+            else {
+                SwitchPanels(startingPanel);
+            }
         }
 
         public void JoinGame()
