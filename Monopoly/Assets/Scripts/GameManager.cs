@@ -18,6 +18,7 @@ namespace Monopoly
         public const byte ReceiveMoneyCode = 3;
         public const byte PropertyChangeCode = 4;
         public const byte EndGameCode = 7;
+        public const byte CardCode = 8;
     
         public Dice dice;
         public Board board;
@@ -40,6 +41,7 @@ namespace Monopoly
         public GameObject PlayerUi;
         public GameObject popUpWindow;
         public GameObject noMoneyOptions;
+        public CardWindow cardWindow;
 
         private bool isRent = false; // Make sure other player receives rent when we exit the NoMoney loop
         
@@ -216,8 +218,8 @@ namespace Monopoly
                         break;
                     case "Chance":
                         Card drawnCard = board.DrawChance();
-                        string chanceCardText = "Chance card: " + drawnCard.description;
-                        SendActivityMessage(chanceCardText);
+                        object[] data = {"Chance", drawnCard.description};
+                        SendEvent(CardCode, data);
                         
                         // If receive money
                         if (drawnCard.amountMoney > 0) {
@@ -239,8 +241,8 @@ namespace Monopoly
                         break;
                     case "Community Chest":
                         Card drawnCard2 = board.DrawCommunityChest();
-                        string communityChestCardText = "Community Chest card: " + drawnCard2.description;
-                        SendActivityMessage(communityChestCardText);
+                        object[] data2 = {"Community Chance", drawnCard2.description};
+                        SendEvent(CardCode, data2);
                         
                         // If receive money
                         if (drawnCard2.amountMoney > 0) {
@@ -670,6 +672,10 @@ namespace Monopoly
                     else {
                         EndGame(players[(int)playerNum], true);
                     }
+                    break;
+                case CardCode:
+                    string[] data2 = (string[])photonEvent.CustomData;
+                    cardWindow.DisplayCard(data2[0], data2[1]);
                     break;
             }
         }
