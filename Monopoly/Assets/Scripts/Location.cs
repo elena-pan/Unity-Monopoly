@@ -24,63 +24,64 @@ namespace Monopoly
     {
         public int price;
         public int housePrice;
-        public int rent;
+        public int baseRent;
         public int numHouses;
         public Player owner;
 
+        public int[] propertyGroup;
         public House[] houses; // Store gameobjects of houses so we can destroy them if this property is sold
         
-        public Property(string name, int price, int housePrice, int rent, Vector3 gridPoint) : base(name, gridPoint)
+        public Property(string name, int price, int housePrice, int rent, Vector3 gridPoint, int[] propertyGroup) : base(name, gridPoint)
         {
             this.price = price;
             this.housePrice = housePrice;
-            this.rent = rent;
+            this.baseRent = rent;
             this.numHouses = 0;
             this.owner = null;
+
+            this.propertyGroup = propertyGroup;
             this.houses = new House[] {null, null, null, null};
+        }
+
+        public int GetRent()
+        {
+            switch (this.numHouses) {
+            case 0:
+                int numOwned = 0;
+                foreach (int propertyNum in this.propertyGroup) {
+                    Property property = (Property)GameManager.instance.board.locations[propertyNum];
+                    if (property.owner == this.owner) {
+                        numOwned++;
+                    }
+                }
+                if (numOwned == propertyGroup.Length) { // Owns all properties in group
+                    return baseRent * 2;
+                }
+                else {
+                    return baseRent;
+                }
+            case 1:
+                return baseRent * 5;
+            case 2:
+                return baseRent * 5 * 3;
+            case 3:
+                return baseRent * 5 * 3 * 3;
+            case 4:
+                return (baseRent * 5 * 3 * 3) + 200;
+            case 5:
+                return ((baseRent * 5 * 3 * 3) + 200) + 200;
+            }
+
+            return -1; // Should not get here (placeholder since we need to cover all paths)
         }
 
         public void BuildHouse()
         {
-            switch (this.numHouses) {
-            case 0:
-                rent = rent * 5;
-                break;
-            case 1:
-                rent = rent * 3;
-                break;
-            case 2:
-                rent = rent * 3;
-                break;
-            case 3:
-                rent = rent + 200;
-                break;
-            case 4:
-                rent = rent + 200;
-                break;
-            }
             this.numHouses++;
         }
 
         public void SellHouse()
         {
-            switch (this.numHouses) {
-            case 1:
-                this.rent = this.rent / 5;
-                break;
-            case 2:
-                this.rent = this.rent / 3;
-                break;
-            case 3:
-                this.rent = this.rent / 3;
-                break;
-            case 4:
-                this.rent = this.rent - 200;
-                break;
-            case 5:
-                this.rent = this.rent - 200;
-                break;
-            }
             this.numHouses--;
         }
 
@@ -88,34 +89,19 @@ namespace Monopoly
         {
             // Destroy house gameobjects
             if (numHouses == 5) {
-                this.houses[0].DestroyHouse();
+                if (this.houses[0] != null) { // If player left game they are automatically destroyed
+                    this.houses[0].DestroyHouse();
+                }
             }
             else {
                 for (int i = 0; i < this.numHouses; i++) {
-                    this.houses[i].DestroyHouse();
+                    if (this.houses[i] != null) {
+                        this.houses[i].DestroyHouse();
+                    }
                 }
             }
 
             this.owner = null;
-            switch (this.numHouses) {
-            case 0:
-                break;
-            case 1:
-                this.rent = this.rent / 5;
-                break;
-            case 2:
-                this.rent = this.rent / 15;
-                break;
-            case 3:
-                this.rent = this.rent / 45;
-                break;
-            case 4:
-                this.rent = (this.rent - 200) / 45;
-                break;
-            case 5:
-                this.rent = (this.rent - 400) / 45;
-                break;
-            }
 	        this.numHouses = 0;
         }
     }

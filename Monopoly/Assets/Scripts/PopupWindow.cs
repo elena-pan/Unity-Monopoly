@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using System.Collections.Generic;
 
 namespace Monopoly
 {
@@ -9,6 +10,12 @@ namespace Monopoly
 
         [SerializeField]
         private Text windowText;
+
+        private Dictionary<int, string> propertyColours;
+
+        void Start() {
+            InitializeColours();
+        }
 
         public void DisplayText(string text) {
             windowText.text = text;
@@ -22,7 +29,12 @@ namespace Monopoly
             bool[] ownedProperties = (bool[])PhotonNetwork.LocalPlayer.CustomProperties["OwnedProperties"];
             for (int i = 0; i < 40; i++) {
                 if (ownedProperties[i] == true) {
-                    text = text + "\n" + GameManager.instance.board.locations[i].name;
+                    if (propertyColours.ContainsKey(i)) { // Set text colour for properties
+                        text = text +"\n<color="+ propertyColours[i] +">"+ GameManager.instance.board.locations[i].name + "</color>";
+                    }
+                    else {
+                        text = text + "\n" + GameManager.instance.board.locations[i].name;
+                    }
                 }
             }
             windowText.text = text;
@@ -88,24 +100,7 @@ namespace Monopoly
                 text = text + "\nPrice: $" + property.price;
                 text = text + "\nHouse price: $" + property.housePrice;
                 text = text + "\nNumber of houses built: " + property.numHouses;
-                int baseRent = property.rent;
-                switch (property.numHouses) {
-                    case 1:
-                        baseRent = property.rent / 5;
-                        break;
-                    case 2:
-                        baseRent = property.rent / 15;
-                        break;
-                    case 3:
-                        baseRent = property.rent / 45;
-                        break;
-                    case 4:
-                        baseRent = (property.rent - 200) / 45;
-                        break;
-                    case 5:
-                        baseRent = (property.rent - 400) / 45;
-                        break;
-                }
+                int baseRent = property.baseRent;
 
                 text = text + "\n\nRent:\n0 houses: $" + baseRent;
                 text = text + "\n1 house: $" + (baseRent * 5);
@@ -116,6 +111,38 @@ namespace Monopoly
                 windowText.text = text;
             }
             this.gameObject.SetActive(true);
+        }
+
+        private void InitializeColours() {
+            propertyColours.Add(1, "#7B4800");
+            propertyColours.Add(3, "#7B4800");
+
+            propertyColours.Add(6, "#3CBEE0");
+            propertyColours.Add(8, "#3CBEE0");
+            propertyColours.Add(9, "#3CBEE0");
+
+            propertyColours.Add(11, "#EC36A0");
+            propertyColours.Add(13, "#EC36A0");
+            propertyColours.Add(14, "#EC36A0");
+
+            propertyColours.Add(16, "#E08110");
+            propertyColours.Add(18, "#E08110");
+            propertyColours.Add(19, "#E08110");
+
+            propertyColours.Add(21, "#CF2C14");
+            propertyColours.Add(23, "#CF2C14");
+            propertyColours.Add(24, "#CF2C14");
+
+            propertyColours.Add(26, "#E2CB1F");
+            propertyColours.Add(27, "#E2CB1F");
+            propertyColours.Add(29, "#E2CB1F");
+
+            propertyColours.Add(31, "#199F1B");
+            propertyColours.Add(32, "#199F1B");
+            propertyColours.Add(34, "#199F1B");
+
+            propertyColours.Add(37, "#152098");
+            propertyColours.Add(39, "#152098");
         }
     }
 }

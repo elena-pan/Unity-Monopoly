@@ -137,6 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lerpSpeed: 5
+  slerpSpeed: 10
 --- !u!114 &3388570341114026037
 MonoBehaviour:
   m_ObjectHideFlags: 0

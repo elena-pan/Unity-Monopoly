@@ -131,9 +131,10 @@ namespace Monopoly
                     }
                 } else { // Owned
                     if (currentLocation.owner != players[currentPlayer]) { // By other
-                        bool paid = PayMoney(currentLocation.rent, currentLocation.owner);
+                        int rent = currentLocation.GetRent();
+                        bool paid = PayMoney(rent, currentLocation.owner);
                         if (paid) {
-                            string text = "paid $" + currentLocation.rent + " in rent to " + currentLocation.owner.NickName;
+                            string text = "paid $" + rent + " in rent to " + currentLocation.owner.NickName;
                             SendActivityMessage(text, currentPlayer);
                         }
                         else {
@@ -218,7 +219,7 @@ namespace Monopoly
                         break;
                     case "Chance":
                         Card drawnCard = board.DrawChance();
-                        object[] data = {"Chance", drawnCard.description};
+                        string[] data = {"Chance", drawnCard.description};
                         SendEvent(CardCode, data);
                         
                         // If receive money
@@ -241,7 +242,7 @@ namespace Monopoly
                         break;
                     case "Community Chest":
                         Card drawnCard2 = board.DrawCommunityChest();
-                        object[] data2 = {"Community Chance", drawnCard2.description};
+                        string[] data2 = {"Community Chance", drawnCard2.description};
                         SendEvent(CardCode, data2);
                         
                         // If receive money
@@ -291,6 +292,7 @@ namespace Monopoly
 
         public void StartTurn()
         {
+            cardWindow.gameObject.SetActive(false);
             CameraController.viewDiceRoll = true;
             if (players[currentPlayer] == PhotonNetwork.LocalPlayer)
             {
