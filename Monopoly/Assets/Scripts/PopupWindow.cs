@@ -29,8 +29,8 @@ namespace Monopoly
             bool[] ownedProperties = (bool[])PhotonNetwork.LocalPlayer.CustomProperties["OwnedProperties"];
             for (int i = 0; i < 40; i++) {
                 if (ownedProperties[i] == true) {
-                    if (propertyColours.ContainsKey(i)) { // Set text colour for properties
-                        text = text +"\n<color="+ propertyColours[i] +">"+ GameManager.instance.board.locations[i].name + "</color>";
+                    if (propertyColours.ContainsKey(i)) { // Put a coloured square corresponding to properties
+                        text = text +"\n" + "<color="+ propertyColours[i] +">"+ "■</color> " + GameManager.instance.board.locations[i].name;
                     }
                     else {
                         text = text + "\n" + GameManager.instance.board.locations[i].name;
@@ -114,6 +114,7 @@ namespace Monopoly
         }
 
         private void InitializeColours() {
+            propertyColours = new Dictionary<int, string>();
             propertyColours.Add(1, "#7B4800");
             propertyColours.Add(3, "#7B4800");
 

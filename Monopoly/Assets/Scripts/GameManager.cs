@@ -25,6 +25,7 @@ namespace Monopoly
 
         public int currentPlayer;
         public Player[] players;
+        public int[][] propertyGroups;
 
         public GameObject cannon;
         public GameObject car;
@@ -52,6 +53,7 @@ namespace Monopoly
 
         void Start ()
         {
+            propertyGroups = new int[][] {new int[] {1, 3}, new int[] {6, 8, 9}, new int[] {11, 13, 14}, new int[] {16, 18, 19}, new int[] {21, 23, 24}, new int[] {26, 27, 29}, new int[] {31, 32, 24}, new int[] {37, 39}};
             pieces = new GameObject[] {cannon, car, iron, locomotive, thimble, topHat, wheelbarrow};
             currentPlayer = 0;
             players = PhotonNetwork.PlayerList;
@@ -79,14 +81,24 @@ namespace Monopoly
 
         void Update()
         {
-            if (HasProperties()) 
+            if (PlayerManager.noMoneyAmount > 0) {
+                DisableButton("sellPropertyButton");
+                DisableButton("buildHouseButton");
+            }
+            else if (HasProperties()) 
             {
                 EnableButton("sellPropertyButton");
+                if (OwnsPropertyGroup()) {
+                    EnableButton("buildHouseButton");
+                }
+                else {
+                    DisableButton("buildHouseButton");
+                }
             }
             else {
                 DisableButton("sellPropertyButton");
+                DisableButton("buildHouseButton");
             }
-            //EnableButton("buildHouseButton");
         }
 
         private void SetupBoard()
@@ -139,12 +151,6 @@ namespace Monopoly
                         }
                         else {
                             isRent = true;
-                        }
-                    } else { // By self
-                        if (PlayerManager.balance >= currentLocation.housePrice) {
-                            if (currentLocation.numHouses < 5) {
-                                EnableButton("buildHouseButton");
-                            }
                         }
                     }
                 }
@@ -270,7 +276,6 @@ namespace Monopoly
         public void NextPlayer()
         {
             DisableButton("buyPropertyButton");
-            DisableButton("buildHouseButton");
             DisableButton("endTurnButton");
 
             CheckNumBankrupt();
@@ -373,6 +378,24 @@ namespace Monopoly
             bool[] ownedProperties = (bool[])PhotonNetwork.LocalPlayer.CustomProperties["OwnedProperties"];
             for (int i = 0; i < 40; i++) {
                 if (ownedProperties[i] == true) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool OwnsPropertyGroup()
+        {
+            bool[] ownedProp = (bool[])PhotonNetwork.LocalPlayer.CustomProperties["OwnedProperties"];
+            foreach (int[] group in propertyGroups) {
+                // Check each property group and see if player owns the entire group
+                int numOwned = 0;
+                for (int i = 0; i < group.Length; i++) {
+                    if (ownedProp[group[i]] == true) {
+                        numOwned++;
+                    }
+                }
+                if (numOwned == group.Length) {
                     return true;
                 }
             }
@@ -714,20 +737,19 @@ namespace Monopoly
             DisableButton("buyPropertyButton");
         }
 
-        public void BuildHouse()
+        public void BuildHouse(int propertyNum)
         {
-            Property property = (Property)board.locations[PlayerManager.location];
+            Property property = (Property)board.locations[propertyNum];
             PlayerManager.balance -= property.housePrice; // Subtract price from balance
             int numHouses = property.numHouses + 1;
 
             // This will change the property on our local player since the message is also sent to us
-            object[] data = new object[] {PlayerManager.location, "buildHouse"};
+            object[] data = new object[] {propertyNum, "buildHouse"};
             SendEvent(PropertyChangeCode, data);
 
             // Send activity message as well
             string text = "built a house on " + property.name;
             SendActivityMessage(text, currentPlayer);
-            DisableButton("buildHouseButton");
 
             // Instantiate a house gameobject - destroy old houses and make hotel if numHouses = 5
             if (numHouses == 5) {
@@ -748,7 +770,7 @@ namespace Monopoly
                 property.houses[numHouses-1] = PhotonNetwork.Instantiate(house.name, location, property.houseRotation, 0).GetComponent<House>();
             }
 
-            board.locations[PlayerManager.location] = property;
+            board.locations[propertyNum] = property;
         }
 
         public void SellProperty(int property)
