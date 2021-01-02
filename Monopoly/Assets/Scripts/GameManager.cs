@@ -115,7 +115,7 @@ namespace Monopoly
             location+=steps;
             if (location > 39)
             {
-                location = location - 39;
+                location = location - 40;
                 if (location != 0) { // Passed but not landed on GO
                     ReceiveMoney(200);
                 }

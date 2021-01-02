@@ -33,7 +33,7 @@ namespace Monopoly
                         text = text +"\n" + "<color="+ propertyColours[i] +">"+ "■</color> " + GameManager.instance.board.locations[i].name;
                     }
                     else {
-                        text = text + "\n" + GameManager.instance.board.locations[i].name;
+                        text = text + "\n" + "<color=8C8C8C>■</color> " + GameManager.instance.board.locations[i].name;
                     }
                 }
             }
