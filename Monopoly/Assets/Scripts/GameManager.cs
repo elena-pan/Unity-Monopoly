@@ -21,6 +21,7 @@ namespace Monopoly
         public const byte CardCode = 8;
     
         public Dice dice;
+        public PhotonView dicePhotonView;
         public Board board;
 
         public int currentPlayer;
@@ -301,8 +302,12 @@ namespace Monopoly
             CameraController.viewDiceRoll = true;
             if (players[currentPlayer] == PhotonNetwork.LocalPlayer)
             {
+                // Transfer ownership to current player so we can control and sync movement of the dice
+                dicePhotonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+
                 popUpWindow.SetActive(true);
                 popUpWindow.SendMessage("DisplayText", "It's your turn! Press space to roll the dice", SendMessageOptions.RequireReceiver);
+
                 StartCoroutine(WaitForDiceRoll(diceNum => {
                     EnableButton("endTurnButton");
                     Move(diceNum);

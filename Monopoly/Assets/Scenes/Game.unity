@@ -5556,7 +5556,7 @@ MonoBehaviour:
   prefixField: -1
   observableSearch: 2
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   ObservedComponents:
   - {fileID: 697344517}
   viewIdField: 1
@@ -14082,6 +14082,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dice: {fileID: 697344516}
+  dicePhotonView: {fileID: 697344518}
   board: {fileID: 1735287476}
   currentPlayer: 0
   cannon: {fileID: 9182977489812836049, guid: 552b1b8116c75ba428ed2fcfe8524740, type: 3}
