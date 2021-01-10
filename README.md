@@ -1,5 +1,4 @@
 # Unity 3D Monopoly Game
-Multiplayer 3D Monopoly game
 
 Play here with your friends: https://elena-pan.github.io/unity-monopoly/
 
