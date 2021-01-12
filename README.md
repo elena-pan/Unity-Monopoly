@@ -1,6 +1,6 @@
 # Unity 3D Monopoly Game
 
-Play here with your friends: https://elena-pan.github.io/unity-monopoly/
+Play here with your friends: https://elena-pan.github.io/Unity-Monopoly/
 
 Note: Playing with yourself in multiple tabs is inadvisable - if one tab goes out of focus, Photon Networking may fail to instantiate the player. Unity's WebGL build also can't quite render the lighting properly.
 
